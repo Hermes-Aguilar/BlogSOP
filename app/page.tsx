@@ -81,7 +81,50 @@ export default function Home() {
           </Link>
         ))}
       </section>
+      {/* INTRODUCCIÓN */}
+      <section className="bg-white border-b border-gray-200 px-8 py-8 flex flex-col sm:flex-row gap-8">
+        <div className="flex-1">
+          <p className="font-mono text-xs text-green-600 tracking-widest uppercase mb-3">
+            // about
+          </p>
+          <h2 className="text-base font-medium text-gray-900 mb-2">
+            ¿Qué es este blog?
+          </h2>
+          <p className="text-sm text-gray-500 leading-relaxed">
+            Este portafolio documenta el trabajo realizado durante el segundo y tercer parcial 
+            de la materia de Sistemas Operativos. Aquí encontrarás una comparativa entre el 
+            temario oficial y las prácticas realizadas, análisis de comandos entre distintos 
+            sistemas y mejoras a los scripts desarrollados en clase.
+          </p>
+        </div>
+
+        <div className="flex-1">
+          <p className="font-mono text-xs text-green-600 tracking-widest uppercase mb-3">
+            // stack
+          </p>
+          <h2 className="text-base font-medium text-gray-900 mb-2">
+            Entorno de trabajo
+          </h2>
+          <div className="flex flex-col gap-2">
+            {[
+              { label: 'Sistema operativo', value: 'Parrot OS / Linux' },
+              { label: 'Shell', value: 'Bash' },
+              { label: 'Materia', value: 'Sistemas Operativos' },
+              { label: 'Semestre', value: '6to semestre' },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center gap-2 text-sm">
+                <span className="font-mono text-green-600 text-xs">$</span>
+                <span className="text-gray-400">{item.label}:</span>
+                <span className="text-gray-800 font-medium">{item.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
     </main>
   )
+
+
+  
 }
