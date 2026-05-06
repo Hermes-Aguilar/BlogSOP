@@ -5,10 +5,11 @@ import { usePathname } from 'next/navigation'
 
 const navLinks = [
   { href: '/', label: 'Inicio' },
-  { href: '/comparativa', label: 'Temario vs Prácticas' },
+  { href: '/temario', label: 'Temario' },
   { href: '/laboratorio', label: 'Laboratorio' },
   { href: '/codigo', label: 'Código' },
   { href: '/reflexion', label: 'Reflexión' },
+  { href: '/contacto', label: 'Contacto' },
 ]
 
 export default function Navbar() {

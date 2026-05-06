@@ -54,7 +54,7 @@ export default function Reflexion() {
           <span className="text-gray-700">·</span>
           <span>~7 min de lectura</span>
           <span className="text-gray-700">·</span>
-          <span className="text-green-400">UTM 025062</span>
+          <span className="text-green-400">UTM 2026</span>
         </div>
       </div>
 

@@ -228,18 +228,33 @@ const categorias = [
 
 export default function Laboratorio() {
   return (
-    <main className="max-w-5xl mx-auto px-6 py-16">
-      <p className="font-mono text-[11px] text-green-400 tracking-[0.2em] uppercase mb-3">
-        // laboratorio
-      </p>
-      <h1 className="text-3xl font-light text-gray-100 tracking-tight mb-2">
-        Laboratorio de comandos
-      </h1>
-      <p className="text-sm text-gray-400 mb-14 max-w-xl leading-relaxed">
-        Syscalls y comandos implementados en Linux durante el segundo y tercer parcial.
-      </p>
+    <main className="bg-[#0a0a0a] text-gray-200">
+      {/* HERO */}
+      <header
+        className="relative h-80 flex items-end px-6 pb-12 border-b border-white/10"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=80')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/80 to-[#0a0a0a]" />
+        <div className="relative z-10 max-w-5xl mx-auto w-full">
+          <p className="font-mono text-[11px] text-green-400 tracking-[0.25em] uppercase mb-4 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+            // laboratorio · syscalls
+          </p>
+          <h1 className="text-4xl sm:text-5xl font-light text-white leading-tight tracking-tight mb-4">
+            Laboratorio de comandos
+            <span className="block text-gray-400 mt-1">— syscalls de Linux</span>
+          </h1>
+          <p className="text-sm text-gray-300 leading-relaxed max-w-xl">
+            Syscalls y comandos implementados en Linux durante el segundo y tercer parcial.
+          </p>
+        </div>
+      </header>
 
-      <div className="flex flex-col gap-16">
+      <div className="max-w-5xl mx-auto px-6 py-16 flex flex-col gap-16">
         {categorias.map((cat) => (
           <section key={cat.categoria}>
             {/* Header de categoría */}

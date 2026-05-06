@@ -3,10 +3,10 @@ import Link from 'next/link'
 const sections = [
   {
     id: '01',
-    slug: '/comparativa',
-    label: 'compare',
-    title: 'Temario vs prácticas',
-    desc: 'Qué se planeó y qué se hizo realmente en cada parcial.',
+    slug: '/temario',
+    label: 'temario',
+    title: 'Temario del curso',
+    desc: 'Cada tema explicado con su descripción, código asociado y lo aprendido.',
   },
   {
     id: '02',
@@ -28,6 +28,13 @@ const sections = [
     label: 'reflect',
     title: 'Reflexión final',
     desc: 'Conclusiones sobre el aprendizaje del semestre.',
+  },
+  {
+    id: '05',
+    slug: '/contacto',
+    label: 'contact',
+    title: 'Contacto y créditos',
+    desc: 'El equipo detrás del blog y el profesor de la materia.',
   },
 ]
 
@@ -56,7 +63,7 @@ export default function Home() {
             <span className="block text-gray-400 mt-1">— segundo y tercer parcial</span>
           </h1>
           <p className="text-sm text-gray-300 leading-relaxed max-w-xl">
-            Documentación comparativa entre el plan de estudios oficial y las prácticas realizadas.
+            Temario del curso, prácticas con su código y salida, y reflexión final del semestre.
           </p>
         </div>
       </section>
@@ -101,9 +108,9 @@ export default function Home() {
           </h2>
           <p className="text-sm text-gray-400 leading-relaxed">
             Este portafolio documenta el trabajo realizado durante el segundo y tercer parcial
-            de la materia de Sistemas Operativos. Encontrarás una comparativa entre el
-            temario oficial y las prácticas realizadas, análisis de comandos entre distintos
-            sistemas, y mejoras a los scripts desarrollados en clase.
+            de la materia de Sistemas Operativos. Encontrarás el temario oficial con cada
+            tema explicado, los códigos de las prácticas con su salida en consola, y un
+            análisis de comandos entre distintos sistemas.
           </p>
         </div>
 

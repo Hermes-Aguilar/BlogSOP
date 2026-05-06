@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const practicas = [
 {
@@ -9,6 +9,22 @@ const practicas = [
     parcial: '2do parcial',
     descripcion: 'Investigación sobre los parámetros IPC en /proc/sys/kernel/: semáforos, memoria compartida y colas de mensajes. Incluye su relación con las syscalls.',
     lenguaje: 'text',
+    salida: `$ cat /proc/sys/kernel/sem
+32000   1024000000      500     32000
+
+$ cat /proc/sys/kernel/shmmax
+18446744073692774399
+
+$ cat /proc/sys/kernel/msgmax
+8192
+
+$ ipcs -a
+------ Message Queues --------
+key        msqid      owner      perms      used-bytes   messages
+------ Shared Memory Segments --------
+key        shmid      owner      perms      bytes      nattch
+------ Semaphore Arrays --------
+key        semid      owner      perms      nsems`,
     mejoras: [
       'Agregar ejemplos prácticos de cuándo ajustar shmmax en bases de datos como PostgreSQL.',
       'Incluir un script de monitoreo que lea /proc/sys/kernel/ en tiempo real.',
@@ -24,6 +40,23 @@ const practicas = [
     parcial: '3er parcial',
     descripcion: 'Shell interactivo implementado desde cero con tabla de despacho. Implementa 20+ comandos usando syscalls directas de Linux.',
     lenguaje: 'c',
+    salida: `$ ./minishell
+mini-shell:/home/hermes$ pwd
+/home/hermes
+mini-shell:/home/hermes$ ls -la
+drwxr-xr-x  hermes hermes  4096  may 06 12:30  .
+drwxr-xr-x  root   root    4096  abr 18 10:00  ..
+-rw-r--r--  hermes hermes   220  abr 18 10:00  .bash_logout
+drwxr-xr-x  hermes hermes  4096  may 04 09:15  Escritorio
+mini-shell:/home/hermes$ uname
+Linux parrot 6.1.0 #1 SMP x86_64
+mini-shell:/home/hermes$ ip
+  Interfaz       IP
+  --------------  ---------------
+  lo             127.0.0.1
+  eth0           192.168.1.10
+mini-shell:/home/hermes$ exit
+[adios]`,
     mejoras: [
       'Agregar historial de comandos con una estructura de cola circular.',
       'Implementar redirección de entrada/salida (>, <, >>).',
@@ -838,152 +871,21 @@ int main() {
     return 0;
 }`,
   },
-{
-    id: 2,
-    titulo: 'Ejercicio 1 — Fork básico con variable independiente',
-    parcial: '2do parcial',
-    descripcion: 'Demuestra que padre e hijo tienen espacios de memoria independientes tras fork(). Cada uno modifica su propia copia de x sin afectar al otro.',
-    lenguaje: 'c',
-    mejoras: [
-      'Agregar wait() en el padre para evitar procesos zombie.',
-      'Imprimir también el PPID del hijo para visualizar la jerarquía.',
-      'Usar volatile en x si se quiere observar comportamiento con señales.',
-    ],
-    codigo: `#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
-
-int main(void)
-{
-    int x = 0;
-    pid_t pid;
-    pid = fork();
-    if (pid == 0)
-    {
-        /* Código ejecutado por el proceso hijo */
-        x = 5;
-        printf("Hijo: PID=%ld, x=%d\n", (long)getpid(), x);
-    }
-    else
-    {
-        /* Código ejecutado por el proceso padre */
-        x = 10;
-        printf("Padre: PID=%ld, x=%d\n", (long)getpid(), x);
-    }
-    return EXIT_SUCCESS;
-}`,
-  },
-  {
-    id: 3,
-    titulo: 'Ejercicio 2 — Fork con manejo de error',
-    parcial: '2do parcial',
-    descripcion: 'Fork básico con los tres casos: hijo (pid==0), padre (pid>0) y error (pid<0). Versión más robusta que ejercicio 1 usando fprintf y perror.',
-    lenguaje: 'c',
-    mejoras: [
-      'Agregar wait() en el padre para esperar al hijo.',
-      'Imprimir el PID del hijo desde el padre usando la variable hijo.',
-      'Verificar con getppid() desde el hijo que el padre es correcto.',
-    ],
-    codigo: `#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
-int main(void)
-{
-    pid_t hijo;
-    hijo = fork();
-    if (hijo == 0)
-    {
-        /* Código ejecutado por el proceso hijo */
-        fprintf(stdout, "Soy el hijo, PID=%ld\n", (long)getpid());
-    }
-    else if (hijo > 0)
-    {
-        /* Código ejecutado por el proceso padre */
-        fprintf(stdout, "Soy el padre, PID=%ld\n", (long)getpid());
-    }
-    else
-    {
-        /* Error al crear el proceso */
-        perror("fork");
-        return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
-}`,
-  },
-  {
-    id: 4,
-    titulo: 'Ejercicio 3 — Cadena de procesos (padre crea hijos en secuencia)',
-    parcial: '2do parcial',
-    descripcion: 'El padre crea hijos en un loop y se detiene con break tras cada fork. Genera una cadena lineal donde cada proceso es hijo del anterior.',
-    lenguaje: 'c',
-    mejoras: [
-      'Agregar wait() para evitar procesos zombie.',
-      'Imprimir el nivel de profundidad para visualizar la cadena.',
-      'Comparar la salida con ejercicio 4 para ver la diferencia de topología.',
-    ],
-    codigo: `#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
-int main(void)
-{
-    pid_t hijo;
-    int n = 5;
-    for (int i = 0; i < n; i++)
-    {
-        hijo = fork();
-        if (hijo > 0)
-        {
-            /* El padre deja de crear más procesos */
-            break;
-        }
-        fprintf(stderr,
-                "Proceso PID=%ld, PPID=%ld\n",
-                (long)getpid(), (long)getppid());
-    }
-    return EXIT_SUCCESS;
-}`,
-  },
-  {
-    id: 5,
-    titulo: 'Ejercicio 4 — Árbol plano (hijos no crean más hijos)',
-    parcial: '2do parcial',
-    descripcion: 'Contrario al ejercicio 3: aquí los hijos se detienen con break. El padre crea todos los procesos directamente, generando una estructura plana.',
-    lenguaje: 'c',
-    mejoras: [
-      'Agregar waitpid() en el padre para esperar a cada hijo en orden.',
-      'Imprimir cuántos hijos creó el padre al final.',
-      'Comparar el árbol de procesos con pstree para visualizarlo.',
-    ],
-    codigo: `#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
-int main(void)
-{
-    pid_t hijo;
-    int n = 5;
-    for (int i = 0; i < n; i++)
-    {
-        hijo = fork();
-        if (hijo == 0)
-        {
-            /* El hijo no crea más procesos */
-            break;
-        }
-    }
-    fprintf(stderr, "Proceso PID=%ld, PPID=%ld\n", (long)getpid(), (long)getppid());
-    return EXIT_SUCCESS;
-}`,
-  },
   {
     id: 6,
     titulo: 'Práctica 1.1 — Árbol binario de procesos',
     parcial: '2do parcial',
     descripcion: 'Cada proceso crea dos hijos recursivamente hasta un nivel máximo. Genera un árbol binario completo. Usa waitpid() para sincronizar cada nivel.',
     lenguaje: 'c',
+    salida: `$ ./arbol 2
+Nivel 0 -> PID=6001 PPID=5900
+Nivel 1 -> PID=6002 PPID=6001
+Nivel 1 -> PID=6003 PPID=6001
+Nivel 2 -> PID=6004 PPID=6002
+Nivel 2 -> PID=6005 PPID=6002
+Nivel 2 -> PID=6006 PPID=6003
+Nivel 2 -> PID=6007 PPID=6003
+[arbol completo: 7 procesos creados]`,
     mejoras: [
       'Agregar indentación en el printf según el nivel para visualizar el árbol.',
       'Limitar nivel_max <= 5 para evitar fork bombs accidentales.',
@@ -1076,6 +978,13 @@ int main(int argc, char *argv[]) {
     parcial: '2do parcial',
     descripcion: 'Padre e hijo calculan factoriales de dos números distintos. Se comunican con dos pipes: uno padre→hijo y otro hijo→padre.',
     lenguaje: 'c',
+    salida: `$ ./factorial 5 7
+[padre] envío n1=5 al hijo
+[hijo]  recibí 5, calculo factorial
+[hijo]  envío 120 al padre
+[padre] recibí 120 del hijo
+[padre] mi factorial(7) = 5040
+Resultado: 5! = 120,  7! = 5040`,
     mejoras: [
       'Validar que n <= 20 para evitar overflow en unsigned long long.',
       'Cerrar todos los extremos del pipe antes de fork para evitar leaks.',
@@ -1205,6 +1114,17 @@ int main(int argc, char *argv[]) {
   {
     id: 8,
     titulo: 'Práctica 2 — Productor: matriz aleatoria por FIFO',
+    salida: `$ mkfifo /tmp/matriz_fifo
+$ ./productor 4
+[productor] FIFO creada en /tmp/matriz_fifo
+[productor] esperando consumidor...
+[productor] generando matriz 4x4:
+   3.21  -1.45   2.78   0.92
+  -2.10   4.55   1.33  -0.67
+   0.88  -3.22   2.01   1.79
+   1.54   0.43  -1.98   2.66
+[productor] enviando matriz por FIFO... ok
+[productor] cerrando FIFO`,
     parcial: '2do parcial',
     descripcion: 'Genera una matriz n×n con valores aleatorios y la escribe en una FIFO nombrada (/tmp/matriz_fifo). Bloquea hasta que el consumidor abre el otro extremo.',
     lenguaje: 'c',
@@ -1297,6 +1217,12 @@ int main(int argc, char *argv[]) {
   {
     id: 9,
     titulo: 'Práctica 2 — Consumidor: determinante por eliminación de Gauss',
+    salida: `$ ./consumidor
+[consumidor] abriendo /tmp/matriz_fifo (lectura)
+[consumidor] matriz recibida 4x4
+[consumidor] aplicando eliminación de Gauss...
+[consumidor] determinante = 73.4521
+[consumidor] FIFO cerrada`,
     parcial: '2do parcial',
     descripcion: 'Lee la matriz desde la FIFO y calcula su determinante con eliminación de Gauss con pivoteo parcial. Elimina la FIFO al terminar con unlink().',
     lenguaje: 'c',
@@ -1425,6 +1351,18 @@ int main(void) {
   {
     id: 10,
     titulo: 'Fuerza bruta — Semáforos + Memoria Compartida + crypt()',
+    salida: `$ sudo ./fuerza usuario1 wordlist.txt
+[init] shm creada (id=98305) tamaño=128 bytes
+[init] semáforos creados (SEM_VACIO=1, SEM_LLENO=0)
+[productor] cargando wordlist.txt (50000 palabras)
+[consumidor] leyendo /etc/shadow para 'usuario1'
+[consumidor] hash objetivo: $6$rounds=...
+[productor] probando: 'password'... no
+[productor] probando: 'qwerty'... no
+[productor] probando: 'linux2026'... ¡coincide!
+[consumidor] CONTRASEÑA ENCONTRADA: linux2026
+[stats] tiempo total: 12.483 s | palabras probadas: 21847
+[cleanup] shm y semáforos liberados`,
     parcial: '2do parcial',
     descripcion: 'Padre genera permutaciones con algoritmo de Heap y las pasa al hijo por memoria compartida. El hijo verifica cada permutación contra el hash real de /etc/shadow usando crypt_r().',
     lenguaje: 'c',
@@ -1763,6 +1701,16 @@ int main(int argc, char *argv[])
   {
     id: 11,
     titulo: 'who_colas — WHO con colas de mensajes System V',
+    salida: `$ ./who_colas
+[padre] cola creada (msqid=32769)
+[padre] leyendo /run/systemd/sessions
+[padre] enviando sesión: hermes tty1 2026-05-06 09:15
+[padre] enviando sesión: guadalupe pts/0 2026-05-06 10:42
+[padre] enviando fin de transmisión
+[hijo]  recibido: hermes      tty1   2026-05-06 09:15
+[hijo]  recibido: guadalupe   pts/0  2026-05-06 10:42
+[hijo]  fin de mensajes — terminando
+[padre] cola eliminada`,
     parcial: '2do parcial',
     descripcion: 'Implementación del comando who usando colas de mensajes. El padre lee sesiones de /run/utmp con getutent() y las envía por msgsnd(). El hijo recibe con msgrcv() e imprime formateado.',
     lenguaje: 'c',
@@ -1930,17 +1878,45 @@ int main(void) {
 export default function Codigo() {
   const [modal, setModal] = useState<typeof practicas[0] | null>(null)
 
+  // Deep-link: si llega ?id=N, abrir el modal correspondiente
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const idParam = params.get('id')
+    if (idParam !== null) {
+      const id = parseInt(idParam, 10)
+      const found = practicas.find((p) => p.id === id)
+      if (found) setModal(found)
+    }
+  }, [])
+
   return (
-    <main className="max-w-5xl mx-auto px-6 py-16">
-      <p className="font-mono text-[11px] text-green-400 tracking-[0.2em] uppercase mb-3">
-        // código
-      </p>
-      <h1 className="text-3xl font-light text-gray-100 tracking-tight mb-2">
-        Prácticas y código
-      </h1>
-      <p className="text-sm text-gray-400 mb-12 max-w-xl leading-relaxed">
-        Programas desarrollados durante el segundo y tercer parcial, cada uno con notas de mejora.
-      </p>
+    <main className="bg-[#0a0a0a] text-gray-200">
+      {/* HERO */}
+      <header
+        className="relative h-80 flex items-end px-6 pb-12 border-b border-white/10"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1400&q=80')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/80 to-[#0a0a0a]" />
+        <div className="relative z-10 max-w-5xl mx-auto w-full">
+          <p className="font-mono text-[11px] text-green-400 tracking-[0.25em] uppercase mb-4 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+            // código · prácticas
+          </p>
+          <h1 className="text-4xl sm:text-5xl font-light text-white leading-tight tracking-tight mb-4">
+            Prácticas y código
+            <span className="block text-gray-400 mt-1">— segundo y tercer parcial</span>
+          </h1>
+          <p className="text-sm text-gray-300 leading-relaxed max-w-xl">
+            Cada práctica con su código, su salida en consola y notas de mejora.
+          </p>
+        </div>
+      </header>
+
+      <div className="max-w-5xl mx-auto px-6 py-16">
 
       {/* GRID DE CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
@@ -2000,7 +1976,7 @@ export default function Codigo() {
               </button>
             </div>
 
-            {/* Dos ventanas: código (arriba) + recomendaciones (abajo) */}
+            {/* Tres ventanas: código (arriba) + salida (medio) + recomendaciones (abajo) */}
             <div className="flex-1 min-h-0 flex flex-col gap-3 p-3 sm:p-4">
               {/* Ventana de código */}
               <section className="flex-1 min-h-0 flex flex-col bg-black rounded-lg overflow-hidden border border-white/10">
@@ -2017,8 +1993,24 @@ export default function Codigo() {
                 </pre>
               </section>
 
+              {/* Ventana de salida */}
+              <section className="shrink-0 max-h-[28%] flex flex-col bg-[#050505] rounded-lg border border-white/10 overflow-hidden">
+                <header className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-[#0d0d0d]">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    <span className="font-mono text-[11px] text-gray-500">
+                      // salida en consola
+                    </span>
+                  </div>
+                  <span className="font-mono text-[11px] text-gray-500">stdout</span>
+                </header>
+                <pre className="flex-1 overflow-auto text-gray-300 font-mono text-xs leading-relaxed p-4 whitespace-pre">
+{modal.salida || '$ # esta práctica no produce salida directa en consola'}
+                </pre>
+              </section>
+
               {/* Ventana de recomendaciones */}
-              <section className="shrink-0 max-h-[38%] flex flex-col bg-[#0d0d0d] rounded-lg border border-white/10 overflow-hidden">
+              <section className="shrink-0 max-h-[28%] flex flex-col bg-[#0d0d0d] rounded-lg border border-white/10 overflow-hidden">
                 <header className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-[#111]">
                   <span className="font-mono text-[11px] text-gray-500">
                     // recomendaciones
@@ -2045,6 +2037,7 @@ export default function Codigo() {
           </div>
         </div>
       )}
+      </div>
     </main>
   )
 }
