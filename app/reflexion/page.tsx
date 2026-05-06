@@ -46,6 +46,8 @@ export default function Reflexion() {
           <span className="flex items-center gap-2">
             <span className="text-gray-600">$</span>
             <span className="text-gray-300">hermes aguilar</span>
+            <span className="text-gray-600">$</span>
+            <span className="text-gray-300">guadalupe</span>
           </span>
           <span className="text-gray-700">·</span>
           <span>mayo 2026</span>
