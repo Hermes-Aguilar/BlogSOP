@@ -15,14 +15,14 @@ export default function Navbar() {
   const pathname = usePathname()
 
   return (
-    <nav className="bg-white border-b border-gray-200 px-6 flex items-center gap-6 sticky top-0 z-10">
-      
+    <nav className="bg-black/70 backdrop-blur-md border-b border-white/10 px-8 flex items-center gap-8 sticky top-0 z-10">
+
       {/* LOGO */}
-      <Link href="/" className="font-mono text-sm font-bold flex items-center gap-1 py-4 select-none">
-        <span className="text-green-600">~$</span>
-        <span className="text-gray-400 font-normal"> sudo </span>
-        <span className="text-gray-900">blog</span>
-        <span className="inline-block w-[2px] h-4 bg-green-600 ml-0.5 cursor-blink" />
+      <Link href="/" className="font-mono text-[13px] font-medium flex items-center gap-1 py-4 select-none">
+        <span className="text-green-400">~$</span>
+        <span className="text-gray-500 font-normal"> sudo </span>
+        <span className="text-gray-100">blog</span>
+        <span className="inline-block w-[2px] h-3.5 bg-green-400 ml-0.5 cursor-blink" />
       </Link>
 
       <div className="flex">
@@ -32,10 +32,10 @@ export default function Navbar() {
             <Link
               key={l.href}
               href={l.href}
-              className={`text-xs px-4 py-4 border-b-2 transition-colors ${
+              className={`text-[11px] tracking-wide uppercase font-mono px-3 py-4 border-b transition-colors ${
                 isActive
-                  ? 'border-green-600 text-green-600 font-medium'
-                  : 'border-transparent text-gray-500 hover:text-gray-900'
+                  ? 'border-green-400 text-green-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-100'
               }`}
             >
               {l.label}
