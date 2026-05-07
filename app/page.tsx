@@ -74,11 +74,12 @@ export default function Home() {
           // secciones
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
-          {sections.map((s) => (
+          {sections.map((s, i) => (
             <Link
               key={s.id}
               href={s.slug}
-              className="group bg-[#0a0a0a] hover:bg-[#141414] p-6 transition-colors flex flex-col gap-3"
+              style={{ animationDelay: `${i * 70}ms` }}
+              className="animate-fade-up group bg-[#0a0a0a] hover:bg-[#141414] p-6 transition-colors flex flex-col gap-3"
             >
               <div className="flex items-center justify-between">
                 <p className="font-mono text-[10px] text-green-400 tracking-widest uppercase">

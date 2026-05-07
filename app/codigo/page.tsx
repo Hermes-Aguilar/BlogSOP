@@ -2279,11 +2279,11 @@ export default function Codigo() {
       {/* MODAL */}
       {modal && (
         <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6"
+          className="animate-modal-backdrop fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6"
           onClick={() => setModal(null)}
         >
           <div
-            className="bg-[#0a0a0a] rounded-xl w-full max-w-6xl h-[95vh] flex flex-col overflow-hidden border border-white/10 shadow-2xl"
+            className="animate-modal-pop bg-[#0a0a0a] rounded-xl w-full max-w-6xl h-[95vh] flex flex-col overflow-hidden border border-white/10 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header modal — sticky */}

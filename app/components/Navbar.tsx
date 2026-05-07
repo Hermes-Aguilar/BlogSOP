@@ -33,11 +33,14 @@ export default function Navbar() {
             <Link
               key={l.href}
               href={l.href}
-              className={`text-[13px] tracking-wide uppercase font-mono px-5 py-6 border-b-2 transition-colors ${
-                isActive
-                  ? 'border-green-400 text-green-400'
-                  : 'border-transparent text-gray-500 hover:text-gray-100'
-              }`}
+              className={`relative text-[13px] tracking-wide uppercase font-mono px-5 py-6 transition-colors
+                after:absolute after:left-5 after:right-5 after:bottom-0 after:h-0.5 after:bg-green-400
+                after:origin-left after:transition-transform after:duration-300 after:ease-out
+                ${
+                  isActive
+                    ? 'text-green-400 after:scale-x-100'
+                    : 'text-gray-500 hover:text-gray-100 after:scale-x-0 hover:after:scale-x-100'
+                }`}
             >
               {l.label}
             </Link>

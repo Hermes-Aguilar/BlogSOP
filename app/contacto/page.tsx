@@ -168,21 +168,38 @@ export default function Contacto() {
 
                 {/* contactos */}
                 <div className="flex flex-col mt-auto pt-3 border-t border-white/10">
-                  {p.contactos.map((c) => (
-                    <a
-                      key={c.tipo}
-                      href={c.href}
-                      className="flex items-center gap-3 py-1.5 text-xs group"
-                    >
-                      <span className="font-mono text-green-400 text-[11px] w-3">$</span>
-                      <span className="text-gray-500 text-[11px] uppercase tracking-wider w-12">
-                        {c.tipo}
-                      </span>
-                      <span className="text-gray-300 font-mono text-[12px] group-hover:text-green-400 transition-colors truncate">
-                        {c.valor}
-                      </span>
-                    </a>
-                  ))}
+                  {p.contactos.map((c) => {
+                    const isExternal = c.href.startsWith('http')
+                    return (
+                      <a
+                        key={c.tipo}
+                        href={c.href}
+                        target={isExternal ? '_blank' : undefined}
+                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                        className="flex items-center gap-3 py-1.5 text-xs group"
+                      >
+                        <span
+                          className={`font-mono text-[11px] w-3 ${
+                            isExternal ? 'text-cyan-400' : 'text-green-400'
+                          }`}
+                        >
+                          $
+                        </span>
+                        <span className="text-gray-500 text-[11px] uppercase tracking-wider w-12">
+                          {c.tipo}
+                        </span>
+                        <span
+                          className={`text-gray-300 font-mono text-[12px] transition-colors truncate ${
+                            isExternal
+                              ? 'group-hover:text-cyan-400'
+                              : 'group-hover:text-green-400'
+                          }`}
+                        >
+                          {c.valor}
+                        </span>
+                      </a>
+                    )
+                  })}
                 </div>
               </div>
             ))}
@@ -335,24 +352,47 @@ export default function Contacto() {
                   // contacto
                 </p>
                 <div className="flex flex-col">
-                  {profLinks.map((c) => (
-                    <a
-                      key={c.label}
-                      href={c.href}
-                      className="flex items-center gap-3 py-2 border-b border-white/10 last:border-0 group"
-                    >
-                      <span className="font-mono text-amber-400 text-[11px] w-3">$</span>
-                      <span className="text-gray-500 text-[11px] uppercase tracking-wider w-16">
-                        {c.label}
-                      </span>
-                      <span className="text-gray-200 font-mono text-[13px] group-hover:text-amber-400 transition-colors">
-                        {c.valor}
-                      </span>
-                      <span className="ml-auto font-mono text-gray-600 group-hover:text-amber-400 transition-colors text-xs">
-                        →
-                      </span>
-                    </a>
-                  ))}
+                  {profLinks.map((c) => {
+                    const isExternal = c.href.startsWith('http')
+                    return (
+                      <a
+                        key={c.label}
+                        href={c.href}
+                        target={isExternal ? '_blank' : undefined}
+                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                        className="flex items-center gap-3 py-2 border-b border-white/10 last:border-0 group"
+                      >
+                        <span
+                          className={`font-mono text-[11px] w-3 ${
+                            isExternal ? 'text-cyan-400' : 'text-amber-400'
+                          }`}
+                        >
+                          $
+                        </span>
+                        <span className="text-gray-500 text-[11px] uppercase tracking-wider w-16">
+                          {c.label}
+                        </span>
+                        <span
+                          className={`text-gray-200 font-mono text-[13px] transition-colors ${
+                            isExternal
+                              ? 'group-hover:text-cyan-400'
+                              : 'group-hover:text-amber-400'
+                          }`}
+                        >
+                          {c.valor}
+                        </span>
+                        <span
+                          className={`ml-auto font-mono text-gray-600 transition-colors text-xs ${
+                            isExternal
+                              ? 'group-hover:text-cyan-400'
+                              : 'group-hover:text-amber-400'
+                          }`}
+                        >
+                          →
+                        </span>
+                      </a>
+                    )
+                  })}
                 </div>
               </div>
 

@@ -352,13 +352,14 @@ export default function Laboratorio() {
             </header>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
-              {cat.comandos.map((cmd) => (
+              {cat.comandos.map((cmd, i) => (
                 <article
                   key={cmd.nombre}
-                  className="bg-[#0a0a0a] hover:bg-[#141414] transition-colors p-5 flex flex-col gap-3"
+                  style={{ animationDelay: `${i * 60}ms` }}
+                  className="animate-fade-up bg-[#0a0a0a] hover:bg-[#141414] transition-colors p-5 flex flex-col gap-3"
                 >
                   <div className="flex items-baseline justify-between gap-3">
-                    <span className="font-mono text-sm font-medium text-gray-100">
+                    <span className="font-mono text-sm font-medium text-purple-400">
                       {cmd.nombre}
                     </span>
                     <span className="font-mono text-[10px] text-green-400 truncate">

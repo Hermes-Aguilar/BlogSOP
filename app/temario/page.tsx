@@ -747,9 +747,10 @@ export default function Temario() {
                       </span>
                     </button>
 
-                    {isOpen && (
-                      <div className="px-5 pb-6 pt-2 bg-[#070707]">
-                        <div className="border-l-2 border-green-400/40 pl-5 sm:ml-12 flex flex-col gap-6">
+                    <div className={`collapse-grid ${isOpen ? 'is-open' : ''}`}>
+                      <div className="collapse-inner">
+                        <div className="px-5 pb-6 pt-2 bg-[#070707]">
+                          <div className="border-l-2 border-green-400/40 pl-5 sm:ml-12 flex flex-col gap-6">
                           {/* Descripción */}
                           <div>
                             <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-2">
@@ -832,7 +833,8 @@ export default function Temario() {
                           </div>
                         </div>
                       </div>
-                    )}
+                      </div>
+                    </div>
                   </div>
                 )
               })}
