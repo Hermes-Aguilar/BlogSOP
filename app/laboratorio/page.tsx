@@ -1,7 +1,6 @@
 const categorias = [
   {
     categoria: 'Sistema de archivos',
-    parcial: '3er parcial — Mini Shell',
     comandos: [
       {
         nombre: 'pwd',
@@ -77,7 +76,6 @@ const categorias = [
   },
   {
     categoria: 'Sistema e información del OS',
-    parcial: '3er parcial — Mini Shell',
     comandos: [
       {
         nombre: 'uname',
@@ -132,7 +130,6 @@ const categorias = [
   },
   {
     categoria: 'Red',
-    parcial: '3er parcial — Mini Shell',
     comandos: [
       {
         nombre: 'ip',
@@ -152,7 +149,6 @@ const categorias = [
   },
   {
     categoria: 'Usuarios y mensajes',
-    parcial: '3er parcial — Mini Shell',
     comandos: [
       {
         nombre: 'who',
@@ -179,7 +175,6 @@ const categorias = [
   },
   {
     categoria: 'Procesos — fork y pipes',
-    parcial: '2do parcial',
     comandos: [
       {
         nombre: 'fork()',
@@ -227,7 +222,6 @@ const categorias = [
   },
   {
     categoria: 'IPC — Semáforos, Memoria Compartida y Colas',
-    parcial: '2do parcial',
     comandos: [
       {
         nombre: 'ftok()',
@@ -261,7 +255,6 @@ const categorias = [
   },
   {
     categoria: 'Hilos — POSIX threads',
-    parcial: '2do parcial · teoría',
     comandos: [
       {
         nombre: 'pthread_create()',
@@ -281,7 +274,6 @@ const categorias = [
   },
   {
     categoria: 'Seguridad y temporización',
-    parcial: '2do parcial',
     comandos: [
       {
         nombre: 'crypt_r()',
@@ -333,12 +325,43 @@ export default function Laboratorio() {
             <span className="block text-gray-400 mt-1">— syscalls de Linux</span>
           </h1>
           <p className="text-sm text-gray-300 leading-relaxed max-w-xl">
-            Syscalls y comandos implementados en Linux durante el segundo y tercer parcial.
+            Syscalls y comandos implementados en Linux a lo largo del curso de Sistemas Operativos.
           </p>
         </div>
       </header>
 
       <div className="max-w-5xl mx-auto px-6 py-16 flex flex-col gap-16">
+        {/* INTRO */}
+        <section className="border border-white/10 rounded-lg bg-[#0d0d0d] px-6 py-7">
+          <p className="font-mono text-[11px] text-green-400 tracking-[0.2em] uppercase mb-3">
+            // antes de empezar
+          </p>
+          <h2 className="text-lg font-light text-gray-100 tracking-tight mb-4">
+            Cómo se construyó este laboratorio
+          </h2>
+          <p className="text-sm text-gray-400 leading-relaxed mb-3">
+            Los comandos listados a continuación corresponden a los códigos
+            escritos durante las prácticas del curso. Cada uno se implementó en
+            C reproduciendo el comportamiento del comando real de Linux, pero
+            invocando directamente la syscall del kernel que está por detrás.
+          </p>
+          <p className="text-sm text-gray-400 leading-relaxed">
+            Por ejemplo, el comando <code className="font-mono text-green-400 text-[0.9em]">pwd</code> se programa con{' '}
+            <code className="font-mono text-green-400 text-[0.9em]">getcwd()</code>,{' '}
+            <code className="font-mono text-green-400 text-[0.9em]">cd</code> con{' '}
+            <code className="font-mono text-green-400 text-[0.9em]">chdir()</code>,{' '}
+            <code className="font-mono text-green-400 text-[0.9em]">mkdir</code> con{' '}
+            <code className="font-mono text-green-400 text-[0.9em]">mkdir()</code>,{' '}
+            <code className="font-mono text-green-400 text-[0.9em]">ls</code> con{' '}
+            <code className="font-mono text-green-400 text-[0.9em]">opendir() / readdir() / stat()</code>,{' '}
+            <code className="font-mono text-green-400 text-[0.9em]">cat</code> con{' '}
+            <code className="font-mono text-green-400 text-[0.9em]">open() / read()</code>, y así
+            sucesivamente con cada uno de los comandos. La columna{' '}
+            <span className="text-gray-300">syscall</span> de cada tarjeta indica
+            exactamente qué llamada al kernel se usó en la práctica.
+          </p>
+        </section>
+
         {categorias.map((cat) => (
           <section key={cat.categoria}>
             {/* Header de categoría */}
@@ -346,9 +369,6 @@ export default function Laboratorio() {
               <p className="font-mono text-[11px] text-green-400 uppercase tracking-[0.2em]">
                 // {cat.categoria}
               </p>
-              <span className="text-[10px] font-mono text-gray-500 uppercase tracking-wider">
-                {cat.parcial}
-              </span>
             </header>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">

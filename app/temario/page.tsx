@@ -19,7 +19,6 @@ type Capitulo = {
   num: string
   titulo: string
   resumen: string
-  parcial?: string
   temas: Tema[]
 }
 
@@ -59,7 +58,6 @@ int main() {
     num: '02',
     titulo: 'Procesos e Hilos',
     resumen: 'Creación, identificación, sincronización y finalización de procesos en Linux.',
-    parcial: '2do parcial',
     temas: [
       {
         id: '2.1',
@@ -342,7 +340,6 @@ int main() {
     num: '03',
     titulo: 'Mecanismos de comunicación entre procesos — IPC',
     resumen: 'Tuberías, FIFOs, semáforos, memoria compartida y colas de mensajes.',
-    parcial: '2do parcial',
     temas: [
       {
         id: '3.1',
@@ -625,7 +622,6 @@ int main() {
     num: '04',
     titulo: 'Proyecto integrador — Mini Shell',
     resumen: 'Shell personalizado en C que integra syscalls de archivos, procesos y red.',
-    parcial: '3er parcial',
     temas: [
       {
         id: '4.1',
@@ -709,11 +705,6 @@ export default function Temario() {
                 </h2>
                 <p className="text-xs text-gray-500 mt-1.5">{cap.resumen}</p>
               </div>
-              {cap.parcial && (
-                <span className="font-mono text-[10px] text-gray-500 uppercase tracking-wider shrink-0">
-                  {cap.parcial}
-                </span>
-              )}
             </div>
 
             {/* Lista de temas */}

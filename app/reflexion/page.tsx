@@ -3,7 +3,7 @@ import Link from 'next/link'
 const stats = [
   { valor: '20+', label: 'comandos implementados' },
   { valor: '6', label: 'syscalls principales' },
-  { valor: '2', label: 'parciales documentados' },
+  { valor: '8', label: 'prácticas documentadas' },
   { valor: '~3k', label: 'líneas de C escritas' },
 ]
 
@@ -35,7 +35,7 @@ export default function Reflexion() {
             </span>
           </h1>
           <p className="text-base text-gray-400 leading-relaxed max-w-2xl">
-            Una mirada a dos parciales donde Sistemas Operativos dejó de ser teoría y se volvió código que se compila y se ejecuta.
+            Una mirada al semestre en que Sistemas Operativos dejó de ser teoría y se volvió código que se compila y se ejecuta.
           </p>
         </div>
       </header>
@@ -66,7 +66,7 @@ export default function Reflexion() {
           <span className="float-left font-mono text-6xl leading-none text-green-400 mr-3 mt-1">
             A
           </span>
-          lo largo del segundo y tercer parcial, la materia de Sistemas Operativos dejó de ser solo teoría para convertirse en algo que se puede ver, compilar y ejecutar. Trabajar directamente con syscalls como{' '}
+          lo largo del semestre, la materia de Sistemas Operativos dejó de ser solo teoría para convertirse en algo que se puede ver, compilar y ejecutar. Trabajar directamente con syscalls como{' '}
           <code className="font-mono text-green-400 bg-white/5 px-1.5 py-0.5 rounded text-[0.95em]">fork()</code>,{' '}
           <code className="font-mono text-green-400 bg-white/5 px-1.5 py-0.5 rounded text-[0.95em]">pipe()</code>,{' '}
           <code className="font-mono text-green-400 bg-white/5 px-1.5 py-0.5 rounded text-[0.95em]">semget()</code> y{' '}
@@ -86,13 +86,13 @@ export default function Reflexion() {
         {/* SECCIÓN 1 */}
         <section className="mb-16">
           <p className="font-mono text-[11px] text-green-400 tracking-[0.2em] uppercase mb-3">
-            // 01 · segundo parcial
+            // 01 · procesos
           </p>
           <h2 className="text-2xl font-light text-gray-100 tracking-tight mb-5">
             Procesos: cuando un programa se duplica a sí mismo
           </h2>
           <p className="text-[15px] text-gray-300 leading-[1.85] mb-5">
-            El segundo parcial fue una introducción práctica al mundo de los procesos. Empezando desde el <code className="font-mono text-green-400 text-[0.9em]">fork()</code> más básico hasta construir árboles binarios de procesos y sistemas productor-consumidor con FIFO y colas de mensajes.
+            La primera mitad del trabajo fue una introducción práctica al mundo de los procesos. Empezando desde el <code className="font-mono text-green-400 text-[0.9em]">fork()</code> más básico hasta construir árboles binarios de procesos y sistemas productor-consumidor con FIFO y colas de mensajes.
           </p>
           <p className="text-[15px] text-gray-400 leading-[1.85]">
             Lo más retador fue entender que padre e hijo comparten el código pero no la memoria, y que sincronizarlos requiere mecanismos explícitos como semáforos o pipes. La primera vez que ves dos procesos imprimiendo en intercalado descontrolado en la terminal, entiendes por qué la sincronización no es opcional.
@@ -112,13 +112,13 @@ export default function Reflexion() {
         {/* SECCIÓN 2 */}
         <section className="mb-16">
           <p className="font-mono text-[11px] text-green-400 tracking-[0.2em] uppercase mb-3">
-            // 02 · tercer parcial
+            // 02 · mini shell
           </p>
           <h2 className="text-2xl font-light text-gray-100 tracking-tight mb-5">
             El shell: cada comando es una syscall disfrazada
           </h2>
           <p className="text-[15px] text-gray-300 leading-[1.85] mb-5">
-            El tercer parcial llevó todo al siguiente nivel: construir un mini shell funcional desde cero en C. Implementar comandos como <code className="font-mono text-green-400 text-[0.9em]">ls</code>, <code className="font-mono text-green-400 text-[0.9em]">stat</code>, <code className="font-mono text-green-400 text-[0.9em]">find</code> o <code className="font-mono text-green-400 text-[0.9em]">who</code> usando syscalls directas fue la forma más concreta de entender cómo funciona Linux por dentro.
+            La siguiente etapa llevó todo al siguiente nivel: construir un mini shell funcional desde cero en C. Implementar comandos como <code className="font-mono text-green-400 text-[0.9em]">ls</code>, <code className="font-mono text-green-400 text-[0.9em]">stat</code>, <code className="font-mono text-green-400 text-[0.9em]">find</code> o <code className="font-mono text-green-400 text-[0.9em]">who</code> usando syscalls directas fue la forma más concreta de entender cómo funciona Linux por dentro.
           </p>
           <p className="text-[15px] text-gray-400 leading-[1.85]">
             Cada comando del shell es, en realidad, una llamada al kernel disfrazada de texto. Cuando tecleas <code className="font-mono text-gray-300 text-[0.9em]">ls -la</code>, no estás invocando magia: estás llamando a <code className="font-mono text-green-400 text-[0.9em]">opendir()</code>, recorriendo el directorio con <code className="font-mono text-green-400 text-[0.9em]">readdir()</code>, y consultando metadatos con <code className="font-mono text-green-400 text-[0.9em]">stat()</code>. Punto.

@@ -7,7 +7,6 @@ const practicas = [
 {
     id: 0,
     titulo: 'Investigación — Mecanismos IPC del Kernel de Linux',
-    parcial: '2do parcial',
     descripcion: 'Investigación sobre los parámetros IPC en /proc/sys/kernel/: semáforos, memoria compartida y colas de mensajes. Incluye su relación con las syscalls.',
     lenguaje: 'text',
     salida: `$ cat /proc/sys/kernel/sem
@@ -366,7 +365,6 @@ kernel.msgmax = 65536`}
   {
     id: 1,
     titulo: 'Mini Shell — Shell personalizado en C',
-    parcial: '3er parcial',
     descripcion: 'Shell interactivo implementado desde cero con tabla de despacho. Implementa 20+ comandos usando syscalls directas de Linux.',
     lenguaje: 'c',
     salida: `$ ./minishell
@@ -1203,7 +1201,6 @@ int main() {
   {
     id: 6,
     titulo: 'Práctica 1.1 — Árbol binario de procesos',
-    parcial: '2do parcial',
     descripcion: 'Cada proceso crea dos hijos recursivamente hasta un nivel máximo. Genera un árbol binario completo. Usa waitpid() para sincronizar cada nivel.',
     lenguaje: 'c',
     salida: `$ ./arbol 2
@@ -1304,7 +1301,6 @@ int main(int argc, char *argv[]) {
   {
     id: 7,
     titulo: 'Práctica 1.2 — Factorial con pipe bidireccional',
-    parcial: '2do parcial',
     descripcion: 'Padre e hijo calculan factoriales de dos números distintos. Se comunican con dos pipes: uno padre→hijo y otro hijo→padre.',
     lenguaje: 'c',
     salida: `$ ./factorial 5 7
@@ -1454,7 +1450,6 @@ $ ./productor 4
    1.54   0.43  -1.98   2.66
 [productor] enviando matriz por FIFO... ok
 [productor] cerrando FIFO`,
-    parcial: '2do parcial',
     descripcion: 'Genera una matriz n×n con valores aleatorios y la escribe en una FIFO nombrada (/tmp/matriz_fifo). Bloquea hasta que el consumidor abre el otro extremo.',
     lenguaje: 'c',
     mejoras: [
@@ -1552,7 +1547,6 @@ int main(int argc, char *argv[]) {
 [consumidor] aplicando eliminación de Gauss...
 [consumidor] determinante = 73.4521
 [consumidor] FIFO cerrada`,
-    parcial: '2do parcial',
     descripcion: 'Lee la matriz desde la FIFO y calcula su determinante con eliminación de Gauss con pivoteo parcial. Elimina la FIFO al terminar con unlink().',
     lenguaje: 'c',
     mejoras: [
@@ -1692,7 +1686,6 @@ int main(void) {
 [consumidor] CONTRASEÑA ENCONTRADA: linux2026
 [stats] tiempo total: 12.483 s | palabras probadas: 21847
 [cleanup] shm y semáforos liberados`,
-    parcial: '2do parcial',
     descripcion: 'Padre genera permutaciones con algoritmo de Heap y las pasa al hijo por memoria compartida. El hijo verifica cada permutación contra el hash real de /etc/shadow usando crypt_r().',
     lenguaje: 'c',
     mejoras: [
@@ -2040,7 +2033,6 @@ int main(int argc, char *argv[])
 [hijo]  recibido: guadalupe   pts/0  2026-05-06 10:42
 [hijo]  fin de mensajes — terminando
 [padre] cola eliminada`,
-    parcial: '2do parcial',
     descripcion: 'Implementación del comando who usando colas de mensajes. El padre lee sesiones de /run/utmp con getutent() y las envía por msgsnd(). El hijo recibe con msgrcv() e imprime formateado.',
     lenguaje: 'c',
     mejoras: [
@@ -2237,7 +2229,7 @@ export default function Codigo() {
           </p>
           <h1 className="text-4xl sm:text-5xl font-light text-white leading-tight tracking-tight mb-4">
             Prácticas y código
-            <span className="block text-gray-400 mt-1">— segundo y tercer parcial</span>
+            <span className="block text-gray-400 mt-1">— Sistemas Operativos</span>
           </h1>
           <p className="text-sm text-gray-300 leading-relaxed max-w-xl">
             Cada práctica con su código, su salida en consola y notas de mejora.
@@ -2257,7 +2249,7 @@ export default function Codigo() {
           >
             <div className="flex items-center justify-between">
               <span className="font-mono text-[10px] text-green-400 tracking-widest uppercase">
-                {p.parcial}
+                práctica
               </span>
               <span className="font-mono text-[10px] text-gray-500">
                 {p.mejoras.length.toString().padStart(2, '0')} notas
@@ -2290,7 +2282,7 @@ export default function Codigo() {
             <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0d0d0d]">
               <div className="min-w-0">
                 <span className="font-mono text-[10px] text-green-400 tracking-widest uppercase">
-                  {modal.parcial}
+                  práctica
                 </span>
                 <h2 className="text-sm font-medium text-gray-100 mt-0.5 truncate">
                   {modal.titulo}

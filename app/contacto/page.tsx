@@ -412,7 +412,7 @@ export default function Contacto() {
             Si tienes preguntas, comentarios o quieres revisar el código fuente de las prácticas, cualquiera de los contactos de arriba funciona. Este blog está pensado como evidencia académica, pero también como referencia para futuros estudiantes que se topen con el mismo temario.
           </p>
           <p className="text-[15px] text-gray-400 leading-[1.85]">
-            Y si eres estudiante leyendo esto antes de tu propio parcial: lee las manpages, escribe el código tú, y no le tengas miedo a <code className="font-mono text-green-400 text-[0.9em]">strace</code>.
+            Y si eres estudiante leyendo esto antes de tu propio examen: lee las manpages, escribe el código tú, y no le tengas miedo a <code className="font-mono text-green-400 text-[0.9em]">strace</code>.
           </p>
         </section>
 

@@ -60,7 +60,6 @@ export default function Home() {
           </p>
           <h1 className="text-4xl sm:text-5xl font-light text-white leading-tight tracking-tight mb-4">
             Sistemas Operativos
-            <span className="block text-gray-400 mt-1">— segundo y tercer parcial</span>
           </h1>
           <p className="text-sm text-gray-300 leading-relaxed max-w-xl">
             Temario del curso, prácticas con su código y salida, y conclusión final del semestre.
@@ -68,66 +67,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* INDEX CARDS */}
-      <section className="max-w-5xl mx-auto px-8 py-16">
-        <p className="font-mono text-[11px] text-green-400 tracking-[0.2em] uppercase mb-6">
-          // secciones
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
-          {sections.map((s, i) => (
-            <Link
-              key={s.id}
-              href={s.slug}
-              style={{ animationDelay: `${i * 70}ms` }}
-              className="animate-fade-up group bg-[#0a0a0a] hover:bg-[#141414] p-6 transition-colors flex flex-col gap-3"
-            >
-              <div className="flex items-center justify-between">
-                <p className="font-mono text-[10px] text-green-400 tracking-widest uppercase">
-                  {s.id} · {s.label}
-                </p>
-                <span className="font-mono text-[11px] text-gray-600 group-hover:text-green-400 transition-colors">
-                  →
-                </span>
-              </div>
-              <h3 className="text-sm font-medium text-gray-100 leading-snug">
-                {s.title}
-              </h3>
-              <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* NAV inferior */}
-      <section className="max-w-5xl mx-auto px-8 pb-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
-          <Link
-            href="/contacto"
-            className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors"
-          >
-            <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-              ← anterior
-            </p>
-            <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-              Contacto y créditos
-            </p>
-          </Link>
-          <Link
-            href="/temario"
-            className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors text-right"
-          >
-            <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-              siguiente →
-            </p>
-            <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-              Temario del curso
-            </p>
-          </Link>
-        </div>
-      </section>
-
-      {/* INTRODUCCIÓN */}
-      <section className="max-w-5xl mx-auto px-8 pb-20 grid grid-cols-1 sm:grid-cols-2 gap-12">
+      {/* INTRODUCCIÓN — about + stack */}
+      <section className="max-w-5xl mx-auto px-8 pt-16 pb-12 grid grid-cols-1 sm:grid-cols-2 gap-12">
         <div>
           <p className="font-mono text-[11px] text-green-400 tracking-[0.2em] uppercase mb-3">
             // about
@@ -136,8 +77,8 @@ export default function Home() {
             ¿Qué es este blog?
           </h2>
           <p className="text-sm text-gray-400 leading-relaxed">
-            Este portafolio documenta el trabajo realizado durante el segundo y tercer parcial
-            de la materia de Sistemas Operativos. Encontrarás el temario oficial con cada
+            Este portafolio documenta el trabajo realizado en la materia de
+            Sistemas Operativos. Encontrarás el temario oficial con cada
             tema explicado, los códigos de las prácticas con su salida en consola, y un
             análisis de comandos entre distintos sistemas.
           </p>
@@ -167,6 +108,88 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* INDEX CARDS */}
+      <section className="max-w-5xl mx-auto px-8 pb-16">
+        <p className="font-mono text-[11px] text-green-400 tracking-[0.2em] uppercase mb-6">
+          // secciones
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
+          {sections.map((s, i) => (
+            <Link
+              key={s.id}
+              href={s.slug}
+              style={{ animationDelay: `${i * 70}ms` }}
+              className="animate-fade-up group bg-[#0a0a0a] hover:bg-[#141414] p-6 transition-colors flex flex-col gap-3"
+            >
+              <div className="flex items-center justify-between">
+                <p className="font-mono text-[10px] text-green-400 tracking-widest uppercase">
+                  {s.id} · {s.label}
+                </p>
+                <span className="font-mono text-[11px] text-gray-600 group-hover:text-green-400 transition-colors">
+                  →
+                </span>
+              </div>
+              <h3 className="text-sm font-medium text-gray-100 leading-snug">
+                {s.title}
+              </h3>
+              <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
+            </Link>
+          ))}
+
+          {/* Sexta celda: imagen decorativa para no dejar el hueco vacío */}
+          <div
+            style={{ animationDelay: `${sections.length * 70}ms` }}
+            className="animate-fade-up relative bg-[#0a0a0a] min-h-[160px] overflow-hidden"
+          >
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `url('https://images.unsplash.com/photo-1629904853893-c2c8981a1dc5?w=900&q=80')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent" />
+            <div className="relative z-10 h-full p-6 flex flex-col justify-end">
+              <p className="font-mono text-[10px] text-green-400 tracking-widest uppercase mb-1">
+                // linux · kernel
+              </p>
+              <p className="text-xs text-gray-300 leading-relaxed">
+                Todo lo que ves en este blog corre sobre syscalls.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* NAV inferior */}
+      <section className="max-w-5xl mx-auto px-8 pb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
+          <Link
+            href="/contacto"
+            className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors"
+          >
+            <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
+              ← anterior
+            </p>
+            <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
+              Contacto y créditos
+            </p>
+          </Link>
+          <Link
+            href="/temario"
+            className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors text-right"
+          >
+            <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
+              siguiente →
+            </p>
+            <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
+              Temario del curso
+            </p>
+          </Link>
         </div>
       </section>
 
