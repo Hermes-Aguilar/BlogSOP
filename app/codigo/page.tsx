@@ -2283,11 +2283,11 @@ export default function Codigo() {
           onClick={() => setModal(null)}
         >
           <div
-            className="bg-[#0a0a0a] rounded-xl w-full max-w-6xl h-[92vh] flex flex-col overflow-hidden border border-white/10 shadow-2xl"
+            className="bg-[#0a0a0a] rounded-xl w-full max-w-6xl h-[95vh] flex flex-col overflow-hidden border border-white/10 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header modal */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0d0d0d]">
+            {/* Header modal — sticky */}
+            <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0d0d0d]">
               <div className="min-w-0">
                 <span className="font-mono text-[10px] text-green-400 tracking-widest uppercase">
                   {modal.parcial}
@@ -2305,11 +2305,13 @@ export default function Codigo() {
               </button>
             </div>
 
-            {/* Ventanas: documentación (si existe) o código + salida, + recomendaciones siempre */}
-            <div className="flex-1 min-h-0 flex flex-col gap-3 p-3 sm:p-4">
+            {/* Wrapper de scroll: sólo overflow, sin layout */}
+            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+              {/* Layout interno con padding y gap */}
+              <div className="p-4 sm:p-5 flex flex-col gap-5">
               {modal.documentacion ? (
                 /* Ventana de documentación (reemplaza código y salida) */
-                <section className="flex-1 min-h-0 flex flex-col bg-[#0a0a0a] rounded-lg overflow-hidden border border-white/10">
+                <section className="flex flex-col bg-[#0a0a0a] rounded-lg overflow-hidden border border-white/10">
                   <header className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-[#0d0d0d]">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
@@ -2321,14 +2323,14 @@ export default function Codigo() {
                     </div>
                     <span className="font-mono text-[11px] text-gray-500">// documentación</span>
                   </header>
-                  <div className="flex-1 overflow-auto p-6 sm:p-8">
+                  <div className="p-6 sm:p-8">
                     {modal.documentacion}
                   </div>
                 </section>
               ) : (
                 <>
-                  {/* Ventana de código */}
-                  <section className="flex-1 min-h-0 flex flex-col bg-black rounded-lg overflow-hidden border border-white/10">
+                  {/* Ventana de código — altura controlada con scroll interno */}
+                  <section className="flex flex-col bg-black rounded-lg overflow-hidden border border-white/10">
                     <header className="flex items-center gap-2 px-4 py-2 border-b border-white/10 bg-[#0d0d0d]">
                       <span className="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
                       <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span>
@@ -2337,13 +2339,13 @@ export default function Codigo() {
                         {modal.lenguaje === 'text' ? 'notas.txt' : `practica.${modal.lenguaje}`}
                       </span>
                     </header>
-                    <pre className="flex-1 overflow-auto text-green-400 font-mono text-xs leading-relaxed p-4 whitespace-pre">
+                    <pre className="overflow-auto text-green-400 font-mono text-xs leading-relaxed p-4 whitespace-pre max-h-[55vh]">
 {modal.codigo || '// sin código asociado — ver recomendaciones'}
                     </pre>
                   </section>
 
                   {/* Ventana de salida */}
-                  <section className="shrink-0 max-h-[28%] flex flex-col bg-[#050505] rounded-lg border border-white/10 overflow-hidden">
+                  <section className="flex flex-col bg-[#050505] rounded-lg border border-white/10 overflow-hidden">
                     <header className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-[#0d0d0d]">
                       <div className="flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
@@ -2353,37 +2355,54 @@ export default function Codigo() {
                       </div>
                       <span className="font-mono text-[11px] text-gray-500">stdout</span>
                     </header>
-                    <pre className="flex-1 overflow-auto text-gray-300 font-mono text-xs leading-relaxed p-4 whitespace-pre">
+                    <pre className="overflow-auto text-gray-300 font-mono text-xs leading-relaxed p-4 whitespace-pre max-h-[35vh]">
 {modal.salida || '$ # esta práctica no produce salida directa en consola'}
                     </pre>
                   </section>
                 </>
               )}
 
-              {/* Ventana de recomendaciones */}
-              <section className="shrink-0 max-h-[28%] flex flex-col bg-[#0d0d0d] rounded-lg border border-white/10 overflow-hidden">
-                <header className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-[#111]">
-                  <span className="font-mono text-[11px] text-gray-500">
-                    // recomendaciones
-                  </span>
-                  <span className="font-mono text-[11px] text-gray-500">
-                    {modal.mejoras.length.toString().padStart(2, '0')}
+              {/* Ventana de mejoras propuestas — altura natural, sin scroll interno */}
+              <section className="flex flex-col bg-[#0d0d0d] rounded-lg border border-white/10 overflow-hidden">
+                <header className="flex items-center justify-between px-5 py-3 border-b border-white/10 bg-linear-to-r from-green-400/5 via-transparent to-transparent">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="font-mono text-xs text-green-400 shrink-0">✦</span>
+                    <span className="font-mono text-[11px] text-gray-100 uppercase tracking-[0.15em] shrink-0">
+                      mejoras propuestas
+                    </span>
+                    <span className="hidden sm:inline text-[11px] text-gray-500 italic truncate">
+                      · ideas para extender este código
+                    </span>
+                  </div>
+                  <span className="font-mono text-[10px] text-green-400 px-2.5 py-1 border border-green-400/30 rounded bg-green-400/5 shrink-0">
+                    {String(modal.mejoras.length).padStart(2, '0')} ideas
                   </span>
                 </header>
-                <ul className="flex-1 overflow-auto px-4 py-3 flex flex-col">
+                <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {modal.mejoras.map((m, i) => (
-                    <li
+                    <article
                       key={i}
-                      className="flex items-start gap-3 text-sm text-gray-300 py-2 border-b border-white/5 last:border-0"
+                      className="group relative flex items-start gap-4 p-5 bg-[#0a0a0a] border border-white/10 rounded-lg hover:border-green-400/40 hover:bg-[#0c0c0c] transition-colors min-h-[120px]"
                     >
-                      <span className="font-mono text-[11px] text-green-400 shrink-0 mt-0.5">
+                      <span className="font-mono text-[11px] text-green-400 w-9 h-9 flex items-center justify-center border border-green-400/30 rounded-md bg-green-400/5 group-hover:bg-green-400/15 group-hover:border-green-400/60 transition-colors shrink-0">
                         {String(i + 1).padStart(2, '0')}
                       </span>
-                      <span className="leading-relaxed">{m}</span>
-                    </li>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-mono text-[9px] text-gray-500 uppercase tracking-[0.2em] mb-2 group-hover:text-green-400 transition-colors">
+                          mejora · {String(i + 1).padStart(2, '0')}
+                        </p>
+                        <p className="text-[13px] text-gray-300 leading-[1.65] group-hover:text-gray-100 transition-colors">
+                          {m}
+                        </p>
+                      </div>
+                      <span className="font-mono text-gray-700 group-hover:text-green-400 group-hover:translate-x-0.5 transition-all shrink-0 mt-1 text-sm">
+                        →
+                      </span>
+                    </article>
                   ))}
-                </ul>
+                </div>
               </section>
+              </div>
             </div>
           </div>
         </div>

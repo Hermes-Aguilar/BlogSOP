@@ -114,6 +114,20 @@ const categorias = [
         uso: 'dev',
         ejemplo: 'sda, tty0, null...',
       },
+      {
+        nombre: 'exit',
+        syscall: 'exit() / _exit()',
+        descripcion: 'Builtin del Mini Shell que termina la sesión interactiva. Internamente llama a exit() para vaciar buffers de stdio antes de salir.',
+        uso: 'exit',
+        ejemplo: '[adios]',
+      },
+      {
+        nombre: 'clock_gettime()',
+        syscall: 'time.h',
+        descripcion: 'Obtiene el tiempo del sistema con resolución de nanosegundos. CLOCK_MONOTONIC es ideal para medir duración porque no se ve afectado por cambios de hora.',
+        uso: 'clock_gettime(CLOCK_MONOTONIC, &ts)',
+        ejemplo: 'fuerza.c — medir tiempo total del ataque',
+      },
     ],
   },
   {
@@ -175,6 +189,20 @@ const categorias = [
         ejemplo: 'Ejercicio 1: padre x=10, hijo x=5',
       },
       {
+        nombre: 'getpid() / getppid()',
+        syscall: 'unistd.h',
+        descripcion: 'getpid() devuelve el PID del proceso actual. getppid() devuelve el PID del padre. Permiten reconstruir la jerarquía padre-hijo creada por fork().',
+        uso: 'pid_t pid = getpid();',
+        ejemplo: 'Práctica 1.1: PID=6001, PPID=5900',
+      },
+      {
+        nombre: 'exit() / _exit()',
+        syscall: 'stdlib.h / unistd.h',
+        descripcion: 'exit() termina ejecutando handlers atexit() y vaciando buffers de stdio. _exit() es la versión cruda al kernel: ideal en hijos tras fork() para no duplicar salida.',
+        uso: 'exit(EXIT_SUCCESS); / _exit(0);',
+        ejemplo: 'Ejercicio 2.6 — terminar limpio sin tocar buffers',
+      },
+      {
         nombre: 'wait() / waitpid()',
         syscall: 'wait() / waitpid()',
         descripcion: 'El padre espera a que un hijo termine. waitpid() permite esperar a un hijo específico por PID.',
@@ -202,6 +230,13 @@ const categorias = [
     parcial: '2do parcial',
     comandos: [
       {
+        nombre: 'ftok()',
+        syscall: 'sys/ipc.h',
+        descripcion: 'Genera una llave única (key_t) a partir de una ruta de archivo y un ID entero. Es determinista: dos procesos sin parentesco obtienen la misma llave si usan los mismos parámetros.',
+        uso: 'key_t k = ftok("archivo", 65);',
+        ejemplo: 'fuerza.c y who_colas.c — llave compartida entre productor y consumidor',
+      },
+      {
         nombre: 'semget() / semop() / semctl()',
         syscall: 'sys/sem.h',
         descripcion: 'Crea, opera y controla semáforos System V. semget() crea el conjunto, semop() realiza operaciones P/V, semctl() lo elimina.',
@@ -221,6 +256,53 @@ const categorias = [
         descripcion: 'Crea y gestiona colas de mensajes System V. Los mensajes tienen tipo y se reciben por filtro.',
         uso: 'msgget(IPC_PRIVATE, flags)',
         ejemplo: 'who_colas.c — padre envía sesiones, hijo imprime con cola de mensajes',
+      },
+    ],
+  },
+  {
+    categoria: 'Hilos — POSIX threads',
+    parcial: '2do parcial · teoría',
+    comandos: [
+      {
+        nombre: 'pthread_create()',
+        syscall: 'pthread.h',
+        descripcion: 'Crea un nuevo hilo dentro del proceso actual que ejecuta una función dada. Compartir memoria con el proceso padre permite comunicación directa entre hilos.',
+        uso: 'pthread_create(&tid, NULL, func, arg)',
+        ejemplo: 'tema 2.8.2 — hilos que imprimen "Hola desde el hilo"',
+      },
+      {
+        nombre: 'pthread_join()',
+        syscall: 'pthread.h',
+        descripcion: 'Espera a que un hilo específico termine y libera sus recursos. Equivalente a wait() pero para hilos en lugar de procesos.',
+        uso: 'pthread_join(tid, NULL)',
+        ejemplo: 'tema 2.8 — el main espera a que el hilo termine',
+      },
+    ],
+  },
+  {
+    categoria: 'Seguridad y temporización',
+    parcial: '2do parcial',
+    comandos: [
+      {
+        nombre: 'crypt_r()',
+        syscall: 'crypt.h',
+        descripcion: 'Versión thread-safe de crypt(). Genera el hash de una contraseña usando el algoritmo indicado por el salt ($1$ MD5, $5$ SHA-256, $6$ SHA-512). Compilar con -lcrypt.',
+        uso: 'crypt_r(pwd, salt, &data)',
+        ejemplo: 'fuerza.c — comparar hash candidato con /etc/shadow',
+      },
+      {
+        nombre: 'inet_ntop()',
+        syscall: 'arpa/inet.h',
+        descripcion: 'Convierte una dirección IP binaria (struct in_addr) a su representación textual. Es la versión moderna y thread-safe de inet_ntoa().',
+        uso: 'inet_ntop(AF_INET, &sa, buf, sz)',
+        ejemplo: 'cmd_ip — formatear "192.168.1.10"',
+      },
+      {
+        nombre: 'dprintf()',
+        syscall: 'stdio.h',
+        descripcion: 'Variante de printf() que escribe directamente sobre un descriptor de archivo en lugar de un FILE*. Útil para escribir a terminales abiertas con open().',
+        uso: 'dprintf(fd, "fmt", args)',
+        ejemplo: 'cmd_mesg / cmd_wall — enviar a la TTY del usuario',
       },
     ],
   },
