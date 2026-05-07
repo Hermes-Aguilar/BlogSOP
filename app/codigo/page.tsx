@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 const practicas = [
 {
@@ -32,6 +33,334 @@ key        semid      owner      perms      nsems`,
       'Agregar una sección sobre POSIX IPC como alternativa moderna al System V.',
     ],
     codigo: ``,
+    documentacion: (
+      <article className="flex flex-col gap-8 text-sm text-gray-300 leading-relaxed">
+        {/* Encabezado */}
+        <header className="pb-5 border-b border-white/10">
+          <p className="font-mono text-[11px] text-green-400 tracking-[0.25em] uppercase mb-2">
+            // investigación
+          </p>
+          <h1 className="text-2xl sm:text-3xl font-light text-gray-100 tracking-tight mb-2">
+            Mecanismos IPC del Kernel de Linux
+          </h1>
+          <p className="text-xs text-gray-400 italic mb-1">
+            Investigación de los campos en /proc/sys/kernel/
+          </p>
+          <p className="text-xs text-gray-500">
+            Aguilar Villa Hermes · Herrera Machorro Guadalupe
+          </p>
+          <p className="text-[11px] font-mono text-gray-600 mt-1">
+            Sistemas Operativos · Gabriel Gerónimo Castillo
+          </p>
+        </header>
+
+        {/* 1. Introducción */}
+        <section>
+          <h2 className="text-base font-medium text-green-400 mb-3">
+            1. Introducción
+          </h2>
+          <p className="mb-3">
+            En los sistemas operativos Unix y Linux, los procesos en ejecución necesitan en muchas ocasiones comunicarse entre sí o sincronizar su trabajo. Para satisfacer esta necesidad, el kernel ofrece un conjunto de mecanismos conocidos como <strong className="text-gray-100">IPC (Inter-Process Communication)</strong>, los cuales permiten el intercambio de información y la coordinación sin necesidad de que los procesos compartan código ni estructura interna.
+          </p>
+          <p>
+            Los IPCs del Sistema V (System V IPC) son los mecanismos heredados del sistema operativo Unix System V y están completamente integrados en el kernel de Linux. Existen tres tipos principales: <span className="text-gray-100">semáforos</span>, <span className="text-gray-100">memoria compartida</span> y <span className="text-gray-100">colas de mensajes</span>. Cada uno tiene parámetros de configuración que definen los límites máximos permitidos en el sistema, y dichos parámetros se almacenan como archivos de texto en el directorio <code className="font-mono text-green-400 bg-white/5 px-1 rounded">/proc/sys/kernel/</code>.
+          </p>
+        </section>
+
+        {/* 2. Ubicación */}
+        <section>
+          <h2 className="text-base font-medium text-green-400 mb-3">
+            2. Ubicación de los parámetros IPC en el sistema
+          </h2>
+          <p className="mb-3">
+            El sistema de archivos virtual <code className="font-mono text-green-400 bg-white/5 px-1 rounded">/proc</code> es una interfaz que el kernel de Linux expone hacia el espacio de usuario. A través de él es posible consultar y, en algunos casos, modificar parámetros internos del sistema operativo sin necesidad de recompilar el kernel.
+          </p>
+          <p className="mb-3">
+            Para acceder a estos archivos desde la terminal se utilizan los siguientes comandos:
+          </p>
+          <pre className="bg-black border border-white/10 rounded-md text-green-400 font-mono text-xs leading-relaxed p-4 overflow-auto whitespace-pre">
+{`cd /proc/sys/kernel/
+ls
+cat sem
+cat shmall    cat shmmax    cat shmmni
+cat msgmax    cat msgmnb    cat msgmni`}
+          </pre>
+          <p className="mt-3">
+            Cada archivo contiene uno o varios números enteros separados por espacios o saltos de línea. Estos números representan límites que el kernel impone al momento de crear nuevos objetos IPC. Cuando una aplicación supera alguno de estos límites, el kernel retorna un error y la operación falla.
+          </p>
+        </section>
+
+        {/* 3. Semáforos */}
+        <section>
+          <h2 className="text-base font-medium text-green-400 mb-3">
+            3. Semáforos — Archivo <code className="font-mono">sem</code>
+          </h2>
+          <p className="mb-3">
+            Un semáforo es un mecanismo de sincronización que permite controlar el acceso a recursos compartidos entre varios procesos. En el contexto del Sistema V, los semáforos se organizan en conjuntos: cada conjunto puede contener uno o más semáforos individuales, y sobre ellos se realizan operaciones atómicas mediante la llamada al sistema <code className="font-mono text-green-400 bg-white/5 px-1 rounded">semop()</code>.
+          </p>
+          <p className="mb-3">
+            El archivo <code className="font-mono text-green-400 bg-white/5 px-1 rounded">/proc/sys/kernel/sem</code> contiene cuatro valores en una sola línea:
+          </p>
+          <div className="overflow-auto border border-white/10 rounded-md">
+            <table className="w-full text-xs">
+              <thead className="bg-[#0d0d0d]">
+                <tr>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Campo</th>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Nombre</th>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Valor típico</th>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Significado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-white/5">
+                  <td className="px-3 py-2 font-mono text-green-400">1°</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">SEMMSL</td>
+                  <td className="px-3 py-2 font-mono text-gray-300">250</td>
+                  <td className="px-3 py-2">Semáforos máximos por conjunto.</td>
+                </tr>
+                <tr className="border-b border-white/5 bg-white/2">
+                  <td className="px-3 py-2 font-mono text-green-400">2°</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">SEMMNS</td>
+                  <td className="px-3 py-2 font-mono text-gray-300">32000</td>
+                  <td className="px-3 py-2">Total de semáforos en el sistema.</td>
+                </tr>
+                <tr className="border-b border-white/5">
+                  <td className="px-3 py-2 font-mono text-green-400">3°</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">SEMOPM</td>
+                  <td className="px-3 py-2 font-mono text-gray-300">32</td>
+                  <td className="px-3 py-2">Operaciones máximas por llamada a semop().</td>
+                </tr>
+                <tr className="bg-white/2">
+                  <td className="px-3 py-2 font-mono text-green-400">4°</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">SEMMNI</td>
+                  <td className="px-3 py-2 font-mono text-gray-300">128</td>
+                  <td className="px-3 py-2">Conjuntos de semáforos máximos.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3">
+            Un ejemplo de contenido real de este archivo sería <code className="font-mono text-green-400 bg-white/5 px-1 rounded">250 32000 32 128</code>: cada conjunto puede tener hasta 250 semáforos, el sistema acepta hasta 32 000 en total, cada llamada a <code className="font-mono">semop()</code> puede incluir hasta 32 operaciones simultáneas, y pueden existir como máximo 128 conjuntos al mismo tiempo. Los semáforos del Sistema V se crean con <code className="font-mono text-green-400">semget()</code>, se manipulan con <code className="font-mono text-green-400">semop()</code> y se eliminan con <code className="font-mono text-green-400">semctl()</code>.
+          </p>
+        </section>
+
+        {/* 4. Memoria compartida */}
+        <section>
+          <h2 className="text-base font-medium text-green-400 mb-3">
+            4. Memoria Compartida — Archivos <code className="font-mono">shm*</code>
+          </h2>
+          <p className="mb-3">
+            La memoria compartida es el mecanismo IPC de mayor rendimiento disponible en Linux, ya que permite que dos o más procesos accedan directamente a la misma región de memoria física sin necesidad de copiar datos entre ellos. El proceso creador la solicita con <code className="font-mono text-green-400 bg-white/5 px-1 rounded">shmget()</code>, los demás la adjuntan a su espacio de direcciones con <code className="font-mono text-green-400 bg-white/5 px-1 rounded">shmat()</code>, y al terminar se libera con <code className="font-mono text-green-400 bg-white/5 px-1 rounded">shmctl(IPC_RMID)</code>.
+          </p>
+          <div className="overflow-auto border border-white/10 rounded-md">
+            <table className="w-full text-xs">
+              <thead className="bg-[#0d0d0d]">
+                <tr>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Archivo</th>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Nombre</th>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Valor típico</th>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Significado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-white/5">
+                  <td className="px-3 py-2 font-mono text-green-400">shmall</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">SHMALL</td>
+                  <td className="px-3 py-2 font-mono text-gray-300">2 097 152</td>
+                  <td className="px-3 py-2">Páginas de 4 KB de memoria compartida totales en el sistema.</td>
+                </tr>
+                <tr className="border-b border-white/5 bg-white/2">
+                  <td className="px-3 py-2 font-mono text-green-400">shmmax</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">SHMMAX</td>
+                  <td className="px-3 py-2 font-mono text-gray-300">8 589 934 592</td>
+                  <td className="px-3 py-2">Tamaño máximo en bytes de un único segmento.</td>
+                </tr>
+                <tr className="border-b border-white/5">
+                  <td className="px-3 py-2 font-mono text-green-400">shmmni</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">SHMMNI</td>
+                  <td className="px-3 py-2 font-mono text-gray-300">4096</td>
+                  <td className="px-3 py-2">Segmentos activos máximos al mismo tiempo.</td>
+                </tr>
+                <tr className="bg-white/2">
+                  <td className="px-3 py-2 font-mono text-green-400">shmmin</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">SHMMIN</td>
+                  <td className="px-3 py-2 font-mono text-gray-300">1</td>
+                  <td className="px-3 py-2">Tamaño mínimo de un segmento (1 byte).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3 mb-3">
+            El parámetro <code className="font-mono text-green-400">shmmax</code> es particularmente importante en aplicaciones de bases de datos como PostgreSQL u Oracle, que suelen requerir segmentos muy grandes. Si <code className="font-mono">shmmax</code> es demasiado pequeño, el motor de base de datos fallará al iniciarse.
+          </p>
+          <p>
+            El parámetro <code className="font-mono text-green-400">shmall</code> controla el total de páginas de memoria compartida disponibles en todo el sistema. Una página en Linux generalmente tiene un tamaño de 4 096 bytes (4 KB), por lo que <code className="font-mono">shmall × 4 KB</code> da el total disponible en bytes.
+          </p>
+        </section>
+
+        {/* 5. Colas de mensajes */}
+        <section>
+          <h2 className="text-base font-medium text-green-400 mb-3">
+            5. Colas de Mensajes — Archivos <code className="font-mono">msg*</code>
+          </h2>
+          <p className="mb-3">
+            Las colas de mensajes permiten que los procesos se intercambien mensajes de manera asíncrona y ordenada. A diferencia de los pipes, los mensajes tienen un tipo asociado, lo que permite que el receptor seleccione mensajes específicos sin necesidad de procesar todos los que lleguen primero. Los mensajes se envían con <code className="font-mono text-green-400 bg-white/5 px-1 rounded">msgsnd()</code> y se reciben con <code className="font-mono text-green-400 bg-white/5 px-1 rounded">msgrcv()</code>; la cola persiste en el kernel hasta que el proceso la elimina con <code className="font-mono text-green-400 bg-white/5 px-1 rounded">msgctl(IPC_RMID)</code>.
+          </p>
+          <div className="overflow-auto border border-white/10 rounded-md">
+            <table className="w-full text-xs">
+              <thead className="bg-[#0d0d0d]">
+                <tr>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Archivo</th>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Nombre</th>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Valor típico</th>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Significado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-white/5">
+                  <td className="px-3 py-2 font-mono text-green-400">msgmax</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">MSGMAX</td>
+                  <td className="px-3 py-2 font-mono text-gray-300">8192</td>
+                  <td className="px-3 py-2">Tamaño máximo en bytes de un único mensaje.</td>
+                </tr>
+                <tr className="border-b border-white/5 bg-white/2">
+                  <td className="px-3 py-2 font-mono text-green-400">msgmnb</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">MSGMNB</td>
+                  <td className="px-3 py-2 font-mono text-gray-300">16384</td>
+                  <td className="px-3 py-2">Tamaño máximo acumulado de una cola completa.</td>
+                </tr>
+                <tr className="bg-white/2">
+                  <td className="px-3 py-2 font-mono text-green-400">msgmni</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">MSGMNI</td>
+                  <td className="px-3 py-2 font-mono text-gray-300">32000</td>
+                  <td className="px-3 py-2">Colas de mensajes simultáneas máximas en el sistema.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3">
+            Si una aplicación intenta enviar un mensaje más grande que <code className="font-mono text-green-400">msgmax</code>, la llamada <code className="font-mono">msgsnd()</code> fallará con el error <code className="font-mono text-amber-400">EINVAL</code>. Por otro lado, <code className="font-mono text-green-400">msgmnb</code> limita el tamaño total acumulado de los mensajes pendientes; si la cola está llena, el proceso que intente enviar un nuevo mensaje quedará bloqueado o recibirá un error.
+          </p>
+        </section>
+
+        {/* 6. System Calls */}
+        <section>
+          <h2 className="text-base font-medium text-green-400 mb-3">
+            6. Relación con las llamadas al sistema (System Calls)
+          </h2>
+          <p className="mb-3">
+            Toda operación que realiza un proceso de usuario sobre los mecanismos IPC —o sobre cualquier recurso del sistema— involucra internamente una llamada al sistema. Las syscalls son la interfaz entre el espacio de usuario y el kernel: cuando un proceso necesita un servicio privilegiado, ejecuta una instrucción especial que transfiere el control al kernel.
+          </p>
+          <p className="mb-3">
+            Una observación importante señalada en clase es que las funciones de la biblioteca estándar de C que utilizamos cotidianamente son envoltorios de llamadas al sistema:
+          </p>
+          <div className="overflow-auto border border-white/10 rounded-md">
+            <table className="w-full text-xs">
+              <thead className="bg-[#0d0d0d]">
+                <tr>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Función de alto nivel</th>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">System call subyacente</th>
+                  <th className="px-3 py-2 text-left font-mono text-[10px] uppercase tracking-wider text-gray-500 border-b border-white/10">Descripción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-white/5">
+                  <td className="px-3 py-2 font-mono text-green-400">printf()</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">write()</td>
+                  <td className="px-3 py-2">Escribe en un descriptor (stdout = fd 1).</td>
+                </tr>
+                <tr className="border-b border-white/5 bg-white/2">
+                  <td className="px-3 py-2 font-mono text-green-400">scanf()</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">read()</td>
+                  <td className="px-3 py-2">Lee desde un descriptor (stdin = fd 0).</td>
+                </tr>
+                <tr className="border-b border-white/5">
+                  <td className="px-3 py-2 font-mono text-green-400">fopen() / fwrite()</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">open() / write()</td>
+                  <td className="px-3 py-2">Operaciones de archivo traducidas a syscalls.</td>
+                </tr>
+                <tr className="bg-white/2">
+                  <td className="px-3 py-2 font-mono text-green-400">fread()</td>
+                  <td className="px-3 py-2 font-mono text-gray-200">read()</td>
+                  <td className="px-3 py-2">Lectura de archivo a través de la biblioteca C.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-3">
+            Esta distinción es relevante porque <code className="font-mono text-green-400">printf()</code> implementa <em>buffering</em> interno para mejorar el rendimiento, mientras que <code className="font-mono text-green-400">write()</code> opera directamente sobre el descriptor sin buffer. En programas con múltiples procesos esto puede hacer que la salida no llegue en el orden esperado si no se vacía con <code className="font-mono text-green-400">fflush()</code>.
+          </p>
+        </section>
+
+        {/* 7. Modificación */}
+        <section>
+          <h2 className="text-base font-medium text-green-400 mb-3">
+            7. Modificación de los parámetros
+          </h2>
+          <p className="mb-3">
+            Los parámetros de los IPCs pueden modificarse en tiempo de ejecución sin reiniciar el sistema. Existen dos formas principales:
+          </p>
+
+          <h3 className="text-sm font-medium text-gray-100 mb-2">
+            7.1 Modificación temporal (se pierde al reiniciar)
+          </h3>
+          <pre className="bg-black border border-white/10 rounded-md text-green-400 font-mono text-xs leading-relaxed p-4 overflow-auto whitespace-pre mb-4">
+{`sudo sysctl -w kernel.sem="250 32000 100 128"
+sudo sysctl -w kernel.shmmax=17179869184
+sudo sysctl -w kernel.msgmax=65536`}
+          </pre>
+
+          <h3 className="text-sm font-medium text-gray-100 mb-2">
+            7.2 Modificación permanente (persiste tras reiniciar)
+          </h3>
+          <p className="mb-3">
+            Para que los cambios sean permanentes se debe editar el archivo <code className="font-mono text-green-400 bg-white/5 px-1 rounded">/etc/sysctl.conf</code> y añadir las líneas correspondientes:
+          </p>
+          <pre className="bg-black border border-white/10 rounded-md text-green-400 font-mono text-xs leading-relaxed p-4 overflow-auto whitespace-pre mb-3">
+{`kernel.sem = 250 32000 100 128
+kernel.shmmax = 17179869184
+kernel.msgmax = 65536`}
+          </pre>
+          <p className="mb-3">Después de editar el archivo, se aplica con:</p>
+          <pre className="bg-black border border-white/10 rounded-md text-green-400 font-mono text-xs leading-relaxed p-4 overflow-auto whitespace-pre">
+{`sudo sysctl -p`}
+          </pre>
+        </section>
+
+        {/* 8. Resumen */}
+        <section>
+          <h2 className="text-base font-medium text-green-400 mb-3">
+            8. Resumen
+          </h2>
+          <p className="mb-4">
+            Los mecanismos IPC del Sistema V son herramientas fundamentales en la programación de sistemas en Linux. Su configuración se expone a través del directorio <code className="font-mono text-green-400 bg-white/5 px-1 rounded">/proc/sys/kernel/</code>, lo que permite tanto consultarlos como ajustarlos sin necesidad de modificar el kernel.
+          </p>
+          <ul className="flex flex-col gap-3 mb-4">
+            <li className="flex items-start gap-3">
+              <span className="font-mono text-green-400 shrink-0 mt-0.5">▸</span>
+              <span>
+                <strong className="text-gray-100">Semáforos (sem):</strong> permiten sincronizar el acceso a recursos compartidos entre procesos. Sus campos controlan cuántos semáforos y conjuntos pueden existir, y cuántas operaciones se hacen en una sola llamada.
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="font-mono text-green-400 shrink-0 mt-0.5">▸</span>
+              <span>
+                <strong className="text-gray-100">Memoria compartida (shm*):</strong> el mecanismo IPC más rápido, ya que los procesos acceden directamente a la misma región de memoria. Sus parámetros definen el tamaño máximo de cada segmento y el total disponible.
+              </span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="font-mono text-green-400 shrink-0 mt-0.5">▸</span>
+              <span>
+                <strong className="text-gray-100">Colas de mensajes (msg*):</strong> permiten el intercambio asíncrono de mensajes tipados entre procesos. Sus parámetros limitan el tamaño de los mensajes individuales y de las colas completas.
+              </span>
+            </li>
+          </ul>
+          <p className="text-gray-400 italic">
+            Comprender estos límites es esencial para diseñar aplicaciones multiproceso robustas, ya que exceder cualquiera de ellos genera errores en tiempo de ejecución difíciles de diagnosticar sin conocer su origen.
+          </p>
+        </section>
+      </article>
+    ),
   },
   
   {
@@ -1976,38 +2305,60 @@ export default function Codigo() {
               </button>
             </div>
 
-            {/* Tres ventanas: código (arriba) + salida (medio) + recomendaciones (abajo) */}
+            {/* Ventanas: documentación (si existe) o código + salida, + recomendaciones siempre */}
             <div className="flex-1 min-h-0 flex flex-col gap-3 p-3 sm:p-4">
-              {/* Ventana de código */}
-              <section className="flex-1 min-h-0 flex flex-col bg-black rounded-lg overflow-hidden border border-white/10">
-                <header className="flex items-center gap-2 px-4 py-2 border-b border-white/10 bg-[#0d0d0d]">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-green-500/70"></span>
-                  <span className="font-mono text-[11px] text-gray-500 ml-2">
-                    {modal.lenguaje === 'text' ? 'notas.txt' : `practica.${modal.lenguaje}`}
-                  </span>
-                </header>
-                <pre className="flex-1 overflow-auto text-green-400 font-mono text-xs leading-relaxed p-4 whitespace-pre">
-{modal.codigo || '// sin código asociado — ver recomendaciones'}
-                </pre>
-              </section>
-
-              {/* Ventana de salida */}
-              <section className="shrink-0 max-h-[28%] flex flex-col bg-[#050505] rounded-lg border border-white/10 overflow-hidden">
-                <header className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-[#0d0d0d]">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                    <span className="font-mono text-[11px] text-gray-500">
-                      // salida en consola
-                    </span>
+              {modal.documentacion ? (
+                /* Ventana de documentación (reemplaza código y salida) */
+                <section className="flex-1 min-h-0 flex flex-col bg-[#0a0a0a] rounded-lg overflow-hidden border border-white/10">
+                  <header className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-[#0d0d0d]">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-green-500/70"></span>
+                      <span className="font-mono text-[11px] text-gray-500 ml-2">
+                        investigacion.md
+                      </span>
+                    </div>
+                    <span className="font-mono text-[11px] text-gray-500">// documentación</span>
+                  </header>
+                  <div className="flex-1 overflow-auto p-6 sm:p-8">
+                    {modal.documentacion}
                   </div>
-                  <span className="font-mono text-[11px] text-gray-500">stdout</span>
-                </header>
-                <pre className="flex-1 overflow-auto text-gray-300 font-mono text-xs leading-relaxed p-4 whitespace-pre">
+                </section>
+              ) : (
+                <>
+                  {/* Ventana de código */}
+                  <section className="flex-1 min-h-0 flex flex-col bg-black rounded-lg overflow-hidden border border-white/10">
+                    <header className="flex items-center gap-2 px-4 py-2 border-b border-white/10 bg-[#0d0d0d]">
+                      <span className="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-green-500/70"></span>
+                      <span className="font-mono text-[11px] text-gray-500 ml-2">
+                        {modal.lenguaje === 'text' ? 'notas.txt' : `practica.${modal.lenguaje}`}
+                      </span>
+                    </header>
+                    <pre className="flex-1 overflow-auto text-green-400 font-mono text-xs leading-relaxed p-4 whitespace-pre">
+{modal.codigo || '// sin código asociado — ver recomendaciones'}
+                    </pre>
+                  </section>
+
+                  {/* Ventana de salida */}
+                  <section className="shrink-0 max-h-[28%] flex flex-col bg-[#050505] rounded-lg border border-white/10 overflow-hidden">
+                    <header className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-[#0d0d0d]">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                        <span className="font-mono text-[11px] text-gray-500">
+                          // salida en consola
+                        </span>
+                      </div>
+                      <span className="font-mono text-[11px] text-gray-500">stdout</span>
+                    </header>
+                    <pre className="flex-1 overflow-auto text-gray-300 font-mono text-xs leading-relaxed p-4 whitespace-pre">
 {modal.salida || '$ # esta práctica no produce salida directa en consola'}
-                </pre>
-              </section>
+                    </pre>
+                  </section>
+                </>
+              )}
 
               {/* Ventana de recomendaciones */}
               <section className="shrink-0 max-h-[28%] flex flex-col bg-[#0d0d0d] rounded-lg border border-white/10 overflow-hidden">
@@ -2037,6 +2388,34 @@ export default function Codigo() {
           </div>
         </div>
       )}
+
+        {/* NAV inferior */}
+        <footer className="mt-12 pt-8 border-t border-white/10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
+            <Link
+              href="/laboratorio"
+              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors"
+            >
+              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
+                ← anterior
+              </p>
+              <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
+                Laboratorio de comandos
+              </p>
+            </Link>
+            <Link
+              href="/reflexion"
+              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors text-right"
+            >
+              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
+                siguiente →
+              </p>
+              <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
+                Conclusión final
+              </p>
+            </Link>
+          </div>
+        </footer>
       </div>
     </main>
   )

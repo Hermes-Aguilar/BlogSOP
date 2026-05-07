@@ -26,7 +26,7 @@ const sections = [
     id: '04',
     slug: '/reflexion',
     label: 'reflect',
-    title: 'Reflexión final',
+    title: 'Conclusión final',
     desc: 'Conclusiones sobre el aprendizaje del semestre.',
   },
   {
@@ -63,7 +63,7 @@ export default function Home() {
             <span className="block text-gray-400 mt-1">— segundo y tercer parcial</span>
           </h1>
           <p className="text-sm text-gray-300 leading-relaxed max-w-xl">
-            Temario del curso, prácticas con su código y salida, y reflexión final del semestre.
+            Temario del curso, prácticas con su código y salida, y conclusión final del semestre.
           </p>
         </div>
       </section>
@@ -94,6 +94,34 @@ export default function Home() {
               <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* NAV inferior */}
+      <section className="max-w-5xl mx-auto px-8 pb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
+          <Link
+            href="/contacto"
+            className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors"
+          >
+            <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
+              ← anterior
+            </p>
+            <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
+              Contacto y créditos
+            </p>
+          </Link>
+          <Link
+            href="/temario"
+            className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors text-right"
+          >
+            <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
+              siguiente →
+            </p>
+            <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
+              Temario del curso
+            </p>
+          </Link>
         </div>
       </section>
 

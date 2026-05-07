@@ -26,12 +26,12 @@ export default function Reflexion() {
         <div className="relative z-10 max-w-3xl mx-auto w-full">
           <p className="font-mono text-[11px] text-green-400 tracking-[0.25em] uppercase mb-4 flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-            // reflexión final · ensayo
+            // conclusión final
           </p>
           <h1 className="text-4xl sm:text-5xl font-light text-white leading-[1.1] tracking-tight mb-4">
-            Lo que aprendí escribiendo
+            Cierre del semestre,
             <span className="block text-gray-400 italic font-extralight">
-              syscalls a mano.
+              entre fork() y waitpid().
             </span>
           </h1>
           <p className="text-base text-gray-400 leading-relaxed max-w-2xl">
@@ -125,39 +125,10 @@ export default function Reflexion() {
           </p>
         </section>
 
-        {/* SECCIÓN 3 - lo que faltó */}
-        <section className="mb-16 bg-white/2 border border-white/10 rounded-lg p-7">
-          <p className="font-mono text-[11px] text-amber-400 tracking-[0.2em] uppercase mb-3">
-            // 03 · áreas de oportunidad
-          </p>
-          <h2 className="text-xl font-light text-gray-100 tracking-tight mb-4">
-            Lo que quedó pendiente
-          </h2>
-          <p className="text-[15px] text-gray-400 leading-[1.85] mb-4">
-            Quedaron temas del temario oficial sin práctica directa: la planificación de procesos, el interbloqueo, la administración de memoria virtual y los temporizadores.
-          </p>
-          <ul className="flex flex-col gap-2 mt-4">
-            {[
-              'Algoritmos de planificación (Round Robin, SJF, prioridad)',
-              'Interbloqueo e inanición — detección y prevención',
-              'Memoria virtual con paginación y segmentación',
-              'Temporizadores y manejo de señales en profundidad',
-            ].map((item) => (
-              <li key={item} className="flex items-start gap-3 text-sm text-gray-400">
-                <span className="font-mono text-amber-400 text-xs mt-1">→</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="text-sm text-gray-500 leading-relaxed mt-5 italic">
-            Son temas que hubiera sido interesante atacar con código — los algoritmos de planificación, en particular, se quedan muy abstractos sin una implementación.
-          </p>
-        </section>
-
         {/* CONCLUSIÓN */}
         <section className="mb-16">
           <p className="font-mono text-[11px] text-green-400 tracking-[0.2em] uppercase mb-3">
-            // 04 · cierre
+            // 03 · cierre
           </p>
           <h2 className="text-2xl font-light text-gray-100 tracking-tight mb-5">
             ¿Y de aquí, qué sigue?
@@ -200,14 +171,14 @@ export default function Reflexion() {
               </p>
             </Link>
             <Link
-              href="/"
+              href="/contacto"
               className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors text-right"
             >
               <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-                inicio →
+                siguiente →
               </p>
               <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-                Portada del blog
+                Contacto y créditos
               </p>
             </Link>
           </div>

@@ -226,6 +226,8 @@ const categorias = [
   },
 ]
 
+import Link from 'next/link'
+
 export default function Laboratorio() {
   return (
     <main className="bg-[#0a0a0a] text-gray-200">
@@ -303,6 +305,34 @@ export default function Laboratorio() {
             </div>
           </section>
         ))}
+
+        {/* NAV inferior */}
+        <footer className="mt-4 pt-8 border-t border-white/10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
+            <Link
+              href="/temario"
+              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors"
+            >
+              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
+                ← anterior
+              </p>
+              <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
+                Temario del curso
+              </p>
+            </Link>
+            <Link
+              href="/codigo"
+              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors text-right"
+            >
+              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
+                siguiente →
+              </p>
+              <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
+                Prácticas y código
+              </p>
+            </Link>
+          </div>
+        </footer>
       </div>
     </main>
   )

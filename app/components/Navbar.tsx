@@ -7,8 +7,8 @@ const navLinks = [
   { href: '/', label: 'Inicio' },
   { href: '/temario', label: 'Temario' },
   { href: '/laboratorio', label: 'Laboratorio' },
-  { href: '/codigo', label: 'Código' },
-  { href: '/reflexion', label: 'Reflexión' },
+  { href: '/codigo', label: 'Practicas' },
+  { href: '/reflexion', label: 'Conclusiones' },
   { href: '/contacto', label: 'Contacto' },
 ]
 

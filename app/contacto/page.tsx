@@ -387,7 +387,7 @@ export default function Contacto() {
                 ← anterior
               </p>
               <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-                Reflexión final
+                Conclusión final
               </p>
             </Link>
             <Link
