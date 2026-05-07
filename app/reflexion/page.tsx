@@ -7,7 +7,16 @@ const stats = [
   { valor: '~3k', label: 'líneas de C escritas' },
 ]
 
-const tags = ['fork()', 'pipe()', 'semget()', 'shmget()', 'msgget()', 'open()', 'stat()', 'ioctl()']
+const tags = [
+  { name: 'fork()', href: 'https://manpages.ubuntu.com/manpages/trusty/es/man2/fork.2.html' },
+  { name: 'pipe()', href: 'https://manpages.ubuntu.com/manpages/trusty/es/man2/pipe.2.html' },
+  { name: 'semget()', href: 'https://manpages.ubuntu.com/manpages/trusty/es/man2/semget.2.html' },
+  { name: 'shmget()', href: 'https://manpages.ubuntu.com/manpages/trusty/es/man2/shmget.2.html' },
+  { name: 'msgget()', href: 'https://manpages.ubuntu.com/manpages/trusty/es/man2/msgget.2.html' },
+  { name: 'open()', href: 'https://manpages.ubuntu.com/manpages/trusty/es/man2/open.2.html' },
+  { name: 'stat()', href: 'https://manpages.ubuntu.com/manpages/trusty/es/man2/stat.2.html' },
+  { name: 'ioctl()', href: 'https://manpages.ubuntu.com/manpages/trusty/es/man2/ioctl.2.html' },
+]
 
 export default function Reflexion() {
   return (
@@ -35,7 +44,7 @@ export default function Reflexion() {
             </span>
           </h1>
           <p className="text-base text-gray-400 leading-relaxed max-w-2xl">
-            Una mirada al semestre en que Sistemas Operativos dejó de ser teoría y se volvió código que se compila y se ejecuta.
+            Una revisión del trabajo realizado en Sistemas Operativos: del modelo conceptual a la implementación concreta sobre el kernel de Linux.
           </p>
         </div>
       </header>
@@ -66,11 +75,11 @@ export default function Reflexion() {
           <span className="float-left font-mono text-6xl leading-none text-green-400 mr-3 mt-1">
             A
           </span>
-          lo largo del semestre, la materia de Sistemas Operativos dejó de ser solo teoría para convertirse en algo que se puede ver, compilar y ejecutar. Trabajar directamente con syscalls como{' '}
+bordar Sistemas Operativos desde la práctica transforma la materia: deja de ser un conjunto de definiciones abstractas y se convierte en código verificable, compilable y ejecutable. El uso directo de syscalls como{' '}
           <code className="font-mono text-green-400 bg-white/5 px-1.5 py-0.5 rounded text-[0.95em]">fork()</code>,{' '}
           <code className="font-mono text-green-400 bg-white/5 px-1.5 py-0.5 rounded text-[0.95em]">pipe()</code>,{' '}
           <code className="font-mono text-green-400 bg-white/5 px-1.5 py-0.5 rounded text-[0.95em]">semget()</code> y{' '}
-          <code className="font-mono text-green-400 bg-white/5 px-1.5 py-0.5 rounded text-[0.95em]">open()</code> permitió entender cómo el kernel de Linux gestiona los procesos, la memoria y los archivos desde adentro, no desde un libro.
+          <code className="font-mono text-green-400 bg-white/5 px-1.5 py-0.5 rounded text-[0.95em]">open()</code> revela cómo el kernel de Linux orquesta procesos, memoria y archivos a nivel de sistema, evidenciando los mecanismos que sostienen la ejecución concurrente y el aislamiento entre tareas.
         </p>
 
         {/* STATS */}
@@ -148,12 +157,17 @@ export default function Reflexion() {
           </p>
           <div className="flex flex-wrap gap-2 mb-10">
             {tags.map((t) => (
-              <span
-                key={t}
-                className="font-mono text-[11px] text-gray-300 bg-white/5 border border-white/10 px-2.5 py-1 rounded hover:border-green-400/40 hover:text-green-400 transition-colors"
+              <a
+                key={t.name}
+                href={t.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`Manual de ${t.name} en manpages.ubuntu.com`}
+                className="group inline-flex items-center gap-1.5 font-mono text-[11px] text-gray-300 bg-white/5 border border-white/10 px-2.5 py-1 rounded hover:border-green-400/40 hover:text-green-400 hover:bg-green-400/5 transition-colors"
               >
-                {t}
-              </span>
+                {t.name}
+                <span className="text-gray-600 group-hover:text-green-400 transition-colors">↗</span>
+              </a>
             ))}
           </div>
 

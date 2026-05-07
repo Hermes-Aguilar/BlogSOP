@@ -263,18 +263,39 @@ export default function Contacto() {
                   </p>
                 </div>
 
-                {/* stats */}
-                <div className="flex flex-col gap-px bg-white/10 border border-white/10 rounded overflow-hidden">
-                  {[
-                    { v: 'M.C.', l: 'Cs. de la Computación · BUAP' },
-                    { v: '4', l: 'universidades del SUEO' },
-                    { v: 'GULMIX', l: 'fundador del grupo de Linux' },
-                  ].map((s) => (
-                    <div key={s.l} className="bg-[#0a0a0a] px-4 py-3">
-                      <p className="font-mono text-lg font-light text-amber-400">{s.v}</p>
-                      <p className="text-[10px] text-gray-500 leading-snug">{s.l}</p>
-                    </div>
-                  ))}
+                {/* stats + tux */}
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-px bg-white/10 border border-white/10 rounded overflow-hidden">
+                    {[
+                      { v: 'M.C.', l: 'Cs. de la Computación · BUAP' },
+                      { v: '4', l: 'universidades del SUEO' },
+                      { v: 'GULMIX', l: 'fundador del grupo de Linux' },
+                      { v: '30+', l: 'años de docencia universitaria' },
+                    ].map((s) => (
+                      <div key={s.l} className="bg-[#0a0a0a] px-4 py-3">
+                        <p className="font-mono text-lg font-light text-amber-400">{s.v}</p>
+                        <p className="text-[10px] text-gray-500 leading-snug">{s.l}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* mascota Tux */}
+                  <figure className="bg-[#0a0a0a] border border-white/10 rounded overflow-hidden flex flex-col items-center px-4 py-5 gap-2">
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg"
+                      alt="Tux, la mascota oficial del kernel Linux"
+                      className="h-24 w-auto select-none pointer-events-none"
+                      loading="lazy"
+                    />
+                    <figcaption className="text-center">
+                      <p className="font-mono text-[10px] text-amber-400 tracking-[0.2em] uppercase">
+                        tux · linux mascot
+                      </p>
+                      <p className="text-[10px] text-gray-500 leading-snug mt-1 italic">
+                        “software libre como motor académico”
+                      </p>
+                    </figcaption>
+                  </figure>
                 </div>
               </div>
 

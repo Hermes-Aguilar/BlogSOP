@@ -6,7 +6,7 @@ import Link from 'next/link'
 const practicas = [
 {
     id: 0,
-    titulo: 'Investigación — Mecanismos IPC del Kernel de Linux',
+    titulo: 'Mecanismos IPC del Kernel de Linux',
     descripcion: 'Investigación sobre los parámetros IPC en /proc/sys/kernel/: semáforos, memoria compartida y colas de mensajes. Incluye su relación con las syscalls.',
     lenguaje: 'text',
     salida: `$ cat /proc/sys/kernel/sem
@@ -26,10 +26,22 @@ key        shmid      owner      perms      bytes      nattch
 ------ Semaphore Arrays --------
 key        semid      owner      perms      nsems`,
     mejoras: [
-      'Agregar ejemplos prácticos de cuándo ajustar shmmax en bases de datos como PostgreSQL.',
-      'Incluir un script de monitoreo que lea /proc/sys/kernel/ en tiempo real.',
-      'Documentar cómo verificar los IPC activos con ipcs -a desde la terminal.',
-      'Agregar una sección sobre POSIX IPC como alternativa moderna al System V.',
+      {
+        breve: 'Agregar ejemplos prácticos de cuándo ajustar shmmax en bases de datos como PostgreSQL.',
+        detalle: 'Motores como PostgreSQL reservan grandes regiones de memoria compartida para shared_buffers. Si shmmax es menor al tamaño solicitado, el servidor falla al arrancar con un error de SHMGET. Convendría documentar cómo calcular un valor adecuado en función de la RAM disponible y del valor de shared_buffers, y mostrar la diferencia entre ajustarlo en caliente con sysctl y dejarlo persistente en /etc/sysctl.conf.',
+      },
+      {
+        breve: 'Incluir un script de monitoreo que lea /proc/sys/kernel/ en tiempo real.',
+        detalle: 'Un pequeño script en bash o C que muestre los valores de sem, shmmax, shmall y msgmax con una frecuencia configurable permitiría observar cómo cambian al crear o liberar IPCs. Ideal acompañarlo con una tabla comparativa antes/después de lanzar un programa que use semget() o shmget(), mostrando explícitamente la presión que ejercen sobre el sistema.',
+      },
+      {
+        breve: 'Documentar cómo verificar los IPC activos con ipcs -a desde la terminal.',
+        detalle: 'El comando ipcs -a expone los IPCs vivos en el sistema, junto con sus permisos, propietario y número de adjuntos. Sería útil añadir capturas reales mostrando una cola de mensajes y un segmento de memoria compartida en uso, junto a ipcrm para eliminarlos cuando un proceso queda colgado y deja recursos huérfanos.',
+      },
+      {
+        breve: 'Agregar una sección sobre POSIX IPC como alternativa moderna al System V.',
+        detalle: 'Las APIs POSIX (shm_open, sem_open, mq_open) ofrecen semántica más limpia, identificadores tipo cadena en lugar de claves numéricas y mejor integración con file descriptors. Convendría comparar System V vs POSIX en una tabla de pros/contras, y mostrar el mismo ejemplo (productor-consumidor) implementado con ambas APIs.',
+      },
     ],
     codigo: ``,
     documentacion: (
@@ -385,11 +397,34 @@ mini-shell:/home/hermes$ ip
 mini-shell:/home/hermes$ exit
 [adios]`,
     mejoras: [
-      'Agregar historial de comandos con una estructura de cola circular.',
-      'Implementar redirección de entrada/salida (>, <, >>).',
-      'Agregar soporte para pipes entre comandos (cmd1 | cmd2).',
-      'Manejar señales como SIGINT (Ctrl+C) para no matar el shell.',
-      'Agregar autocompletado de rutas con Tab usando readline.',
+      {
+        breve: 'Mostrar ls en varias columnas y con colores según el tipo de entrada.',
+        detalle: 'El ls actual imprime una entrada por línea, cuando GNU ls muestra resultados en columnas adaptadas al ancho de la terminal. Se podría leer las dimensiones con ioctl(TIOCGWINSZ) y distribuir los nombres en filas/columnas. Además, usando códigos ANSI (\\033[34m para directorios, \\033[32m para ejecutables, \\033[36m para enlaces simbólicos) se podría diferenciar visualmente cada tipo de archivo, igual que lo hace GNU ls cuando se exporta LS_COLORS.',
+      },
+      {
+        breve: 'Agregar una cabecera explicativa cuando se ejecuta ls -la.',
+        detalle: 'Hoy ls -la imprime las columnas (permisos, enlaces, dueño, grupo, tamaño, fecha, nombre) sin contexto. Sería didáctico imprimir antes una línea de cabecera tipo "PERM  N  OWNER  GROUP  SIZE  DATE  NAME" para que el usuario sepa qué representa cada campo. Incluso se podría agregar una bandera como --explain que añada una leyenda con la descomposición de los permisos rwxr-xr-x.',
+      },
+      {
+        breve: 'Agregar historial de comandos con una estructura de cola circular.',
+        detalle: 'Mantener un buffer circular de tamaño fijo (por ejemplo 50) que registre los comandos ingresados, accesibles con flechas arriba/abajo. Esto requeriría leer la entrada en modo no canónico con termios y manejar las secuencias de escape \\033[A y \\033[B. Adicionalmente, persistir el historial en ~/.minishell_history al salir, similar a como lo hace bash.',
+      },
+      {
+        breve: 'Implementar redirección de entrada/salida (>, <, >>).',
+        detalle: 'Antes del execvp() habría que detectar los operadores de redirección, abrir el archivo destino con open() (O_WRONLY | O_CREAT | O_TRUNC para >, O_APPEND para >>) y reemplazar STDOUT_FILENO o STDIN_FILENO con dup2(). Esto convierte al shell en una herramienta realmente útil para guiar la salida hacia archivos.',
+      },
+      {
+        breve: 'Agregar soporte para pipes entre comandos (cmd1 | cmd2).',
+        detalle: 'Implementar pipes implica parsear el comando por el separador |, crear un pipe() por cada par de procesos, hacer dup2() del extremo de escritura del primero al stdout del hijo y del extremo de lectura al stdin del siguiente. Es uno de los ejercicios más formativos porque obliga a coordinar fork, exec, dup2 y close de forma precisa.',
+      },
+      {
+        breve: 'Manejar señales como SIGINT (Ctrl+C) para no matar el shell.',
+        detalle: 'Por defecto, Ctrl+C envía SIGINT al proceso en primer plano y mata el shell. Con sigaction() se puede instalar un handler que ignore la señal en el shell pero la deje pasar al proceso hijo en ejecución. También conviene manejar SIGCHLD para reapear automáticamente los procesos terminados.',
+      },
+      {
+        breve: 'Agregar autocompletado de rutas con Tab usando readline.',
+        detalle: 'Integrando GNU Readline (-lreadline) se obtiene edición de línea, historial persistente y autocompletado configurable. Habría que registrar un completer personalizado con rl_attempted_completion_function que liste comandos del PATH cuando se está al inicio y archivos del directorio actual cuando se está escribiendo un argumento.',
+      },
     ],
     codigo: `#include <stdio.h>
 #include <unistd.h>
@@ -1213,9 +1248,18 @@ Nivel 2 -> PID=6006 PPID=6003
 Nivel 2 -> PID=6007 PPID=6003
 [arbol completo: 7 procesos creados]`,
     mejoras: [
-      'Agregar indentación en el printf según el nivel para visualizar el árbol.',
-      'Limitar nivel_max <= 5 para evitar fork bombs accidentales.',
-      'Usar un semáforo para ordenar la salida por nivel de forma consistente.',
+      {
+        breve: 'Agregar indentación en el printf según el nivel para visualizar el árbol.',
+        detalle: 'Pasar como parámetro adicional el nivel actual al hijo y usarlo para imprimir tantos espacios o guiones como profundidad tenga. Así, en lugar de una salida plana se vería un árbol real (├── PID=… └── PID=…), reflejando la estructura recursiva del fork. Esto convierte el ejercicio en una visualización útil para entender la profundidad del árbol de procesos.',
+      },
+      {
+        breve: 'Limitar nivel_max <= 5 para evitar fork bombs accidentales.',
+        detalle: 'Un árbol binario de profundidad n crea 2^(n+1)-1 procesos. Con n=10 ya se rondan los 2 047 procesos, y un valor mayor por error puede congelar el sistema. Validar el argumento de entrada y rechazar valores superiores a un umbral seguro (5 o 6) protege al usuario y al sistema, y conviene acompañarlo de un mensaje claro explicando por qué.',
+      },
+      {
+        breve: 'Usar un semáforo para ordenar la salida por nivel de forma consistente.',
+        detalle: 'Por la naturaleza concurrente de fork(), las líneas impresas por procesos de distintos niveles aparecen mezcladas. Sincronizar los printf con un semáforo POSIX (sem_wait/sem_post) o con un mutex en memoria compartida garantiza una salida ordenada por niveles, que es mucho más fácil de leer y demostrar en clase.',
+      },
     ],
     codigo: `/*
  * Ejercicio 1: Árbol binario de procesos
@@ -1311,9 +1355,18 @@ int main(int argc, char *argv[]) {
 [padre] mi factorial(7) = 5040
 Resultado: 5! = 120,  7! = 5040`,
     mejoras: [
-      'Validar que n <= 20 para evitar overflow en unsigned long long.',
-      'Cerrar todos los extremos del pipe antes de fork para evitar leaks.',
-      'Usar shared memory en lugar de pipe para evitar la serialización.',
+      {
+        breve: 'Validar que n <= 20 para evitar overflow en unsigned long long.',
+        detalle: '21! ya supera el rango máximo de unsigned long long (~1.8e19), por lo que valores mayores producen resultados truncados sin advertencia. Conviene validar la entrada con una comprobación temprana y, si se quiere ir más lejos, usar bibliotecas de precisión arbitraria como GMP (mpz_t) para soportar factoriales grandes con resultados correctos.',
+      },
+      {
+        breve: 'Cerrar todos los extremos del pipe antes de fork para evitar leaks.',
+        detalle: 'Después de fork(), padre e hijo heredan ambos extremos del pipe. Si el padre no cierra el extremo de escritura una vez que el hijo termina, una posterior lectura quedará bloqueada esperando datos que nunca llegarán. La regla mnemotécnica: cada proceso cierra los extremos que no usa, inmediatamente después del fork, para evitar fugas de descriptores y deadlocks.',
+      },
+      {
+        breve: 'Usar shared memory en lugar de pipe para evitar la serialización.',
+        detalle: 'Los pipes obligan a serializar/deserializar los enteros como bytes. Con un segmento de memoria compartida (shmget+shmat) ambos procesos pueden escribir directamente sobre la misma estructura, eliminando el costo de read/write. Para más de un valor habría que coordinar con un semáforo, pero el rendimiento mejora notablemente cuando se transfieren muchos resultados.',
+      },
     ],
     codigo: `/*
  * Ejercicio 2: Factorial de dos números con procesos y pipe
@@ -1453,9 +1506,18 @@ $ ./productor 4
     descripcion: 'Genera una matriz n×n con valores aleatorios y la escribe en una FIFO nombrada (/tmp/matriz_fifo). Bloquea hasta que el consumidor abre el otro extremo.',
     lenguaje: 'c',
     mejoras: [
-      'Enviar la matriz en binario en lugar de texto para mayor eficiencia.',
-      'Agregar un timeout con alarm() para no bloquear indefinidamente.',
-      'Verificar que n no supere MAX_N antes de alocar el arreglo.',
+      {
+        breve: 'Enviar la matriz en binario en lugar de texto para mayor eficiencia.',
+        detalle: 'El productor actualmente formatea la matriz como texto con sprintf, lo que duplica el tamaño de los datos y obliga al consumidor a hacer atoi/strtod. Enviando los double en binario (write(fd, matriz, n*n*sizeof(double))) se reduce el ancho de banda y se elimina el costo de parseo. Hay que tener cuidado con el orden de bytes (endianness) si las máquinas pudieran ser distintas.',
+      },
+      {
+        breve: 'Agregar un timeout con alarm() para no bloquear indefinidamente.',
+        detalle: 'Si el consumidor nunca abre el otro extremo de la FIFO, el productor queda bloqueado en open() esperando. Instalando un handler para SIGALRM con sigaction() y llamando a alarm(N) antes del open(), el proceso puede abortar limpiamente y borrar la FIFO si pasan N segundos sin lector. Esto evita procesos zombies a la espera eterna.',
+      },
+      {
+        breve: 'Verificar que n no supere MAX_N antes de alocar el arreglo.',
+        detalle: 'El consumo de memoria de una matriz n×n crece cuadráticamente: con n=1000 ya son 8 MB en double. Establecer un MAX_N (por ejemplo 100) y validarlo al inicio evita que un valor erróneo dispare un malloc gigantesco o desborde la pila si se usa un VLA. El mensaje de error debe explicar por qué se rechazó el valor.',
+      },
     ],
     codigo: `/*
  * Tarea 2 - Productor
@@ -1550,9 +1612,18 @@ int main(int argc, char *argv[]) {
     descripcion: 'Lee la matriz desde la FIFO y calcula su determinante con eliminación de Gauss con pivoteo parcial. Elimina la FIFO al terminar con unlink().',
     lenguaje: 'c',
     mejoras: [
-      'Agregar manejo explícito de matrices singulares con mensaje de error.',
-      'Leer en binario si el productor se migra a formato binario.',
-      'Mostrar los pasos intermedios de la eliminación para fines didácticos.',
+      {
+        breve: 'Agregar manejo explícito de matrices singulares con mensaje de error.',
+        detalle: 'Cuando todos los pivotes posibles son cero, la matriz es singular y su determinante es cero, pero el algoritmo actual puede caer en una división por cero o devolver NaN sin advertencia. Al detectar |pivote| < EPSILON conviene imprimir un mensaje claro ("matriz singular: determinante = 0") y salir con un código de error específico, para distinguir esa condición de un fallo real.',
+      },
+      {
+        breve: 'Leer en binario si el productor se migra a formato binario.',
+        detalle: 'Si el productor pasa a formato binario (mejora propuesta del lado emisor), el consumidor debe sincronizarse: una sola read() de n*n*sizeof(double) directamente sobre el arreglo, en lugar de leer línea por línea con fscanf. Esto exige también acordar el endianness y un protocolo simple de cabecera donde primero se envíe n y luego los datos.',
+      },
+      {
+        breve: 'Mostrar los pasos intermedios de la eliminación para fines didácticos.',
+        detalle: 'Imprimir la matriz tras cada pivoteo y tras cada eliminación de columna convierte el ejercicio en una herramienta educativa: el alumno ve cómo la matriz se vuelve triangular superior paso a paso. Convendría agregar una bandera --verbose o -v para activar este modo sin saturar la salida cuando solo interesa el determinante final.',
+      },
     ],
     codigo: `/*
  * Tarea 2 - Consumidor
@@ -1689,10 +1760,22 @@ int main(void) {
     descripcion: 'Padre genera permutaciones con algoritmo de Heap y las pasa al hijo por memoria compartida. El hijo verifica cada permutación contra el hash real de /etc/shadow usando crypt_r().',
     lenguaje: 'c',
     mejoras: [
-      'Limitar el tamaño del password base para evitar tiempos exponenciales (n! crece muy rápido).',
-      'Usar múltiples hijos en paralelo para dividir el espacio de búsqueda.',
-      'Agregar un límite de tiempo máximo con alarm() y SIGALRM.',
-      'Usar mlock() para evitar que la ZonaCompartida sea paginada a disco.',
+      {
+        breve: 'Limitar el tamaño del password base para evitar tiempos exponenciales (n! crece muy rápido).',
+        detalle: 'Con 8 caracteres ya son 40 320 permutaciones, con 10 son 3.6 millones, y con 12 son 479 millones. Más allá de eso el costo se vuelve prohibitivo incluso para un único intento de crypt_r() (que es deliberadamente lento). Validar al inicio que strlen(base) <= 9 o aplicar una poda inteligente (descartar permutaciones repetidas si hay caracteres iguales) mantiene el ejercicio dentro de tiempos razonables.',
+      },
+      {
+        breve: 'Usar múltiples hijos en paralelo para dividir el espacio de búsqueda.',
+        detalle: 'En lugar de un único consumidor, dividir las permutaciones entre N hijos (uno por núcleo lógico) escala casi linealmente con sysconf(_SC_NPROCESSORS_ONLN). Cada hijo tomaría un rango disjunto del espacio (por ejemplo todas las que empiecen por la letra A van al hijo 0, las que empiezan por B al hijo 1, etc.). El primero que encuentre la coincidencia avisa al resto vía señal o flag en memoria compartida.',
+      },
+      {
+        breve: 'Agregar un límite de tiempo máximo con alarm() y SIGALRM.',
+        detalle: 'Si la contraseña no está dentro de las permutaciones de la base provista, el programa correrá hasta agotar todas las posibilidades. Programando alarm(timeout) y un handler para SIGALRM, el proceso puede abortar limpiamente tras N segundos, liberar la zona compartida con shmctl(IPC_RMID) y los semáforos con semctl, evitando dejar IPCs huérfanos.',
+      },
+      {
+        breve: 'Usar mlock() para evitar que la ZonaCompartida sea paginada a disco.',
+        detalle: 'Para datos sensibles como hashes de contraseñas, dejar la página en swap supone un riesgo: queda escrita en disco aunque el proceso termine. Llamando a mlock() sobre el segmento de memoria compartida se fuerza al kernel a mantenerlo siempre en RAM. Hay que recordar liberar con munlock() y considerar el límite RLIMIT_MEMLOCK del proceso.',
+      },
     ],
     codigo: `/*
  * tarea3_maria.c  —  Semáforos + Memoria Compartida + crypt()
@@ -2036,10 +2119,22 @@ int main(int argc, char *argv[])
     descripcion: 'Implementación del comando who usando colas de mensajes. El padre lee sesiones de /run/utmp con getutent() y las envía por msgsnd(). El hijo recibe con msgrcv() e imprime formateado.',
     lenguaje: 'c',
     mejoras: [
-      'Usar IPC_NOWAIT en msgsnd() para no bloquear si la cola está llena.',
-      'Agregar filtro por tipo de sesión: X11, tty, pts.',
-      'Mostrar tiempo de inactividad calculando diferencia con time().',
-      'Manejar SIGCHLD para detectar si el hijo muere inesperadamente.',
+      {
+        breve: 'Usar IPC_NOWAIT en msgsnd() para no bloquear si la cola está llena.',
+        detalle: 'Por defecto, msgsnd() bloquea cuando la cola alcanza msgmax bytes acumulados. Con la bandera IPC_NOWAIT la llamada retorna -1 con errno=EAGAIN, lo que permite implementar una política de retry/backoff o registrar el evento en un log. Es útil cuando el productor no puede permitirse quedar bloqueado, como en programas con UI o con múltiples consumidores.',
+      },
+      {
+        breve: 'Agregar filtro por tipo de sesión: X11, tty, pts.',
+        detalle: 'El campo ut_line indica el dispositivo de la sesión: tty1 para terminal local, pts/0 para terminales virtuales (ssh, tmux), :0 o :1 para sesiones X11. Añadiendo banderas como -t tty o -t x11 se podría filtrar la salida y replicar el comportamiento de who -T. La lógica simplemente compara strncmp(entry.ut_line, "pts/", 4) y similares.',
+      },
+      {
+        breve: 'Mostrar tiempo de inactividad calculando diferencia con time().',
+        detalle: 'El comando who -u real muestra cuánto lleva el usuario sin actividad. Esto se obtiene con stat() sobre el dispositivo de la terminal (/dev/tty1 o /dev/pts/0) y comparando st_atime con time(NULL). El resultado en segundos se formatea como "HH:MM" si es reciente, "old" si supera las 24 horas. Es un buen ejemplo de combinar stat() con utmp.',
+      },
+      {
+        breve: 'Manejar SIGCHLD para detectar si el hijo muere inesperadamente.',
+        detalle: 'Si el proceso hijo cae por una señal o segfault, el padre sigue intentando enviar mensajes a la cola y el programa no se entera. Instalando un handler para SIGCHLD con sigaction() y waitpid(WNOHANG), el padre puede detectar la muerte, registrar el código de salida y abortar limpiamente, eliminando la cola con msgctl(IPC_RMID) para no dejar recursos huérfanos.',
+      },
     ],
     codigo: `#include <stdio.h>
 #include <stdlib.h>
@@ -2198,6 +2293,18 @@ int main(void) {
 
 export default function Codigo() {
   const [modal, setModal] = useState<typeof practicas[0] | null>(null)
+  const [mejoraSel, setMejoraSel] = useState<{ breve: string; detalle: string; index: number } | null>(null)
+
+  // ESC cierra primero el detalle de mejora; si no hay, cierra la práctica
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      if (mejoraSel) setMejoraSel(null)
+      else if (modal) setModal(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [modal, mejoraSel])
 
   // Deep-link: si llega ?id=N, abrir el modal correspondiente
   useEffect(() => {
@@ -2372,9 +2479,11 @@ export default function Codigo() {
                 </header>
                 <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {modal.mejoras.map((m, i) => (
-                    <article
+                    <button
                       key={i}
-                      className="group relative flex items-start gap-4 p-5 bg-[#0a0a0a] border border-white/10 rounded-lg hover:border-green-400/40 hover:bg-[#0c0c0c] transition-colors min-h-[120px]"
+                      type="button"
+                      onClick={() => setMejoraSel({ breve: m.breve, detalle: m.detalle, index: i })}
+                      className="group relative flex items-start gap-4 p-5 bg-[#0a0a0a] border border-white/10 rounded-lg hover:border-green-400/40 hover:bg-[#0c0c0c] transition-colors min-h-[120px] text-left cursor-pointer"
                     >
                       <span className="font-mono text-[11px] text-green-400 w-9 h-9 flex items-center justify-center border border-green-400/30 rounded-md bg-green-400/5 group-hover:bg-green-400/15 group-hover:border-green-400/60 transition-colors shrink-0">
                         {String(i + 1).padStart(2, '0')}
@@ -2384,17 +2493,82 @@ export default function Codigo() {
                           mejora · {String(i + 1).padStart(2, '0')}
                         </p>
                         <p className="text-[13px] text-gray-300 leading-[1.65] group-hover:text-gray-100 transition-colors">
-                          {m}
+                          {m.breve}
+                        </p>
+                        <p className="font-mono text-[10px] text-gray-600 group-hover:text-green-400 transition-colors mt-3">
+                          ver detalle →
                         </p>
                       </div>
                       <span className="font-mono text-gray-700 group-hover:text-green-400 group-hover:translate-x-0.5 transition-all shrink-0 mt-1 text-sm">
                         →
                       </span>
-                    </article>
+                    </button>
                   ))}
                 </div>
               </section>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SUB-MODAL: detalle de una mejora */}
+      {mejoraSel && (
+        <div
+          className="animate-modal-backdrop fixed inset-0 bg-black/85 backdrop-blur-md z-60 flex items-center justify-center p-4 sm:p-6"
+          onClick={() => setMejoraSel(null)}
+        >
+          <div
+            className="animate-modal-pop bg-[#0a0a0a] rounded-xl w-full max-w-xl border border-green-400/30 shadow-2xl flex flex-col overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+          >
+            {/* Header */}
+            <div className="shrink-0 flex items-start justify-between px-6 py-5 border-b border-white/10 bg-linear-to-r from-green-400/10 via-transparent to-transparent">
+              <div className="flex items-start gap-4 min-w-0">
+                <span className="font-mono text-[12px] text-green-400 w-10 h-10 flex items-center justify-center border border-green-400/40 rounded-md bg-green-400/10 shrink-0">
+                  {String(mejoraSel.index + 1).padStart(2, '0')}
+                </span>
+                <div className="min-w-0">
+                  <p className="font-mono text-[10px] text-green-400 uppercase tracking-[0.2em] mb-1">
+                    mejora propuesta
+                  </p>
+                  <h3 className="text-sm font-medium text-gray-100 leading-snug">
+                    {mejoraSel.breve}
+                  </h3>
+                </div>
+              </div>
+              <button
+                onClick={() => setMejoraSel(null)}
+                aria-label="Cerrar"
+                className="ml-3 shrink-0 w-8 h-8 flex items-center justify-center rounded-md text-gray-500 hover:text-gray-100 hover:bg-white/10 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Contenido */}
+            <div className="px-6 py-6 sm:px-7 sm:py-7">
+              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-3">
+                // por qué y cómo
+              </p>
+              <p className="text-[14px] text-gray-300 leading-[1.75]">
+                {mejoraSel.detalle}
+              </p>
+            </div>
+
+            {/* Footer */}
+            <div className="shrink-0 flex items-center justify-between px-6 py-3 border-t border-white/10 bg-[#0d0d0d]">
+              <span className="font-mono text-[10px] text-gray-600 uppercase tracking-wider">
+                esc para cerrar
+              </span>
+              <button
+                onClick={() => setMejoraSel(null)}
+                className="font-mono text-[11px] text-green-400 hover:text-green-300 transition-colors"
+              >
+                cerrar →
+              </button>
             </div>
           </div>
         </div>
