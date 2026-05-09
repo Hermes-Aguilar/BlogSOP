@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import PageHero from '../components/PageHero'
+import FooterNav from '../components/FooterNav'
 
 type Tema = {
   id: string
@@ -667,29 +669,13 @@ export default function Temario() {
   return (
     <main className="bg-[#0a0a0a] text-gray-200">
       {/* HERO */}
-      <header
-        className="relative h-80 flex items-end px-6 pb-12 border-b border-white/10"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1532012197267-da84d127e765?w=1400&q=80')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/80 to-[#0a0a0a]" />
-        <div className="relative z-10 max-w-5xl mx-auto w-full">
-          <p className="font-mono text-[11px] text-green-400 tracking-[0.25em] uppercase mb-4 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-            // temario · proyecto ordinario
-          </p>
-          <h1 className="text-4xl sm:text-5xl font-light text-white leading-tight tracking-tight mb-4">
-            Temario
-            <span className="block text-gray-400 mt-1">— Sistemas Operativos</span>
-          </h1>
-          <p className="text-sm text-gray-300 leading-relaxed max-w-xl">
-            Cada tema del programa explicado con su descripción, código de ejemplo y la práctica del semestre relacionada.
-          </p>
-        </div>
-      </header>
+      <PageHero
+        kicker="// temario · proyecto ordinario"
+        title="Temario"
+        accent="— Sistemas Operativos"
+        subtitle="Cada tema del programa explicado con su descripción, código de ejemplo y la práctica del semestre relacionada."
+        image="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=1400&q=80"
+      />
 
       <div className="max-w-5xl mx-auto px-6 py-16">
         {capitulos.map((cap) => (
@@ -834,32 +820,12 @@ export default function Temario() {
         ))}
 
         {/* NAV inferior */}
-        <footer className="mt-12 pt-8 border-t border-white/10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
-            <Link
-              href="/"
-              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors"
-            >
-              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-                ← anterior
-              </p>
-              <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-                Inicio
-              </p>
-            </Link>
-            <Link
-              href="/laboratorio"
-              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors text-right"
-            >
-              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-                siguiente →
-              </p>
-              <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-                Laboratorio de comandos
-              </p>
-            </Link>
-          </div>
-        </footer>
+        <FooterNav
+          prevHref="/"
+          prevLabel="Inicio"
+          nextHref="/laboratorio"
+          nextLabel="Laboratorio de comandos"
+        />
       </div>
     </main>
   )

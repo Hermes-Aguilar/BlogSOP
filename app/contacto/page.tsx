@@ -1,4 +1,5 @@
-import Link from 'next/link'
+import PageHero from '../components/PageHero'
+import FooterNav from '../components/FooterNav'
 
 const team = [
   {
@@ -65,31 +66,15 @@ export default function Contacto() {
     <main className="bg-[#0a0a0a] text-gray-200">
 
       {/* HERO */}
-      <header
-        className="relative h-96 flex items-end px-6 pb-12 border-b border-white/10"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=1400&q=80')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/80 to-[#0a0a0a]" />
-        <div className="relative z-10 max-w-3xl mx-auto w-full">
-          <p className="font-mono text-[11px] text-green-400 tracking-[0.25em] uppercase mb-4 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-            // contacto · who-is
-          </p>
-          <h1 className="text-4xl sm:text-5xl font-light text-white leading-[1.1] tracking-tight mb-4">
-            Detrás del repositorio
-            <span className="block text-gray-400 italic font-extralight">
-              hay personas reales.
-            </span>
-          </h1>
-          <p className="text-base text-gray-400 leading-relaxed max-w-2xl">
-            El equipo que construyó este portafolio y el profesor que nos enseñó a abrir la caja negra del kernel.
-          </p>
-        </div>
-      </header>
+      <PageHero
+        kicker="// contacto · who-is"
+        title="Detrás del repositorio"
+        accent="hay personas reales."
+        subtitle="El equipo que construyó este portafolio y el profesor que nos enseñó a abrir la caja negra del kernel."
+        height="h-96"
+        maxWidth="max-w-3xl"
+        image="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=1400&q=80"
+      />
 
       {/* META BAR */}
       <div className="border-b border-white/10">
@@ -438,32 +423,13 @@ export default function Contacto() {
         </section>
 
         {/* FOOTER NAV */}
-        <footer className="mt-20 pt-8 border-t border-white/10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
-            <Link
-              href="/reflexion"
-              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors"
-            >
-              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-                ← anterior
-              </p>
-              <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-                Conclusión final
-              </p>
-            </Link>
-            <Link
-              href="/"
-              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors text-right"
-            >
-              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-                inicio →
-              </p>
-              <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-                Portada del blog
-              </p>
-            </Link>
-          </div>
-        </footer>
+        <FooterNav
+          className="mt-20"
+          prevHref="/reflexion"
+          prevLabel="Conclusión final"
+          nextHref="/"
+          nextLabel="Portada del blog"
+        />
 
       </article>
     </main>

@@ -1,4 +1,5 @@
-import Link from 'next/link'
+import PageHero from '../components/PageHero'
+import SpotlightCard from '../components/SpotlightCard'
 
 const stats = [
   { valor: '20+', label: 'comandos implementados' },
@@ -23,31 +24,15 @@ export default function Reflexion() {
     <main className="bg-[#0a0a0a] text-gray-200">
 
       {/* HERO */}
-      <header
-        className="relative h-96 flex items-end px-6 pb-12 border-b border-white/10"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1629904853716-f0bc54eea481?w=1400&q=80')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/80 to-[#0a0a0a]" />
-        <div className="relative z-10 max-w-3xl mx-auto w-full">
-          <p className="font-mono text-[11px] text-green-400 tracking-[0.25em] uppercase mb-4 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-            // conclusión final
-          </p>
-          <h1 className="text-4xl sm:text-5xl font-light text-white leading-[1.1] tracking-tight mb-4">
-            Cierre del semestre,
-            <span className="block text-gray-400 italic font-extralight">
-              entre fork() y waitpid().
-            </span>
-          </h1>
-          <p className="text-base text-gray-400 leading-relaxed max-w-2xl">
-            Una revisión del trabajo realizado en Sistemas Operativos: del modelo conceptual a la implementación concreta sobre el kernel de Linux.
-          </p>
-        </div>
-      </header>
+      <PageHero
+        kicker="// conclusión final"
+        title="Cierre del semestre,"
+        accent="entre fork() y waitpid()."
+        subtitle="Una revisión del trabajo realizado en Sistemas Operativos: del modelo conceptual a la implementación concreta sobre el kernel de Linux."
+        height="h-96"
+        maxWidth="max-w-3xl"
+        image="https://images.unsplash.com/photo-1629904853716-f0bc54eea481?w=1400&q=80"
+      />
 
       {/* META BAR */}
       <div className="border-b border-white/10">
@@ -173,28 +158,34 @@ bordar Sistemas Operativos desde la práctica transforma la materia: deja de ser
 
           {/* NAV */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
-            <Link
+            <SpotlightCard
               href="/codigo"
-              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors"
+              className="group bg-[#0a0a0a] hover:bg-[#101010] p-5 transition-colors block"
             >
-              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-                ← anterior
+              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-2">
+                <span className="inline-block transition-transform duration-300 group-hover:-translate-x-1">
+                  ←
+                </span>
+                anterior
               </p>
               <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
                 Prácticas y código
               </p>
-            </Link>
-            <Link
+            </SpotlightCard>
+            <SpotlightCard
               href="/contacto"
-              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors text-right"
+              className="group bg-[#0a0a0a] hover:bg-[#101010] p-5 transition-colors text-right block"
             >
-              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-                siguiente →
+              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-2 justify-end">
+                siguiente
+                <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
               </p>
               <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
                 Contacto y créditos
               </p>
-            </Link>
+            </SpotlightCard>
           </div>
         </footer>
 

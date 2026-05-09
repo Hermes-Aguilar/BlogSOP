@@ -1,3 +1,6 @@
+import PageHero from '../components/PageHero'
+import FooterNav from '../components/FooterNav'
+
 const categorias = [
   {
     categoria: 'Sistema de archivos',
@@ -306,29 +309,13 @@ export default function Laboratorio() {
   return (
     <main className="bg-[#0a0a0a] text-gray-200">
       {/* HERO */}
-      <header
-        className="relative h-80 flex items-end px-6 pb-12 border-b border-white/10"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=80')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/80 to-[#0a0a0a]" />
-        <div className="relative z-10 max-w-5xl mx-auto w-full">
-          <p className="font-mono text-[11px] text-green-400 tracking-[0.25em] uppercase mb-4 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-            // laboratorio · syscalls
-          </p>
-          <h1 className="text-4xl sm:text-5xl font-light text-white leading-tight tracking-tight mb-4">
-            Laboratorio de comandos
-            <span className="block text-gray-400 mt-1">— syscalls de Linux</span>
-          </h1>
-          <p className="text-sm text-gray-300 leading-relaxed max-w-xl">
-            Syscalls y comandos implementados en Linux a lo largo del curso de Sistemas Operativos.
-          </p>
-        </div>
-      </header>
+      <PageHero
+        kicker="// laboratorio · syscalls"
+        title="Laboratorio de comandos"
+        accent="— syscalls de Linux"
+        subtitle="Syscalls y comandos implementados en Linux a lo largo del curso de Sistemas Operativos."
+        image="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=80"
+      />
 
       <div className="max-w-5xl mx-auto px-6 py-16 flex flex-col gap-16">
         {/* INTRO */}
@@ -410,32 +397,13 @@ export default function Laboratorio() {
         ))}
 
         {/* NAV inferior */}
-        <footer className="mt-4 pt-8 border-t border-white/10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
-            <Link
-              href="/temario"
-              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors"
-            >
-              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-                ← anterior
-              </p>
-              <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-                Temario del curso
-              </p>
-            </Link>
-            <Link
-              href="/codigo"
-              className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors text-right"
-            >
-              <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-                siguiente →
-              </p>
-              <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-                Prácticas y código
-              </p>
-            </Link>
-          </div>
-        </footer>
+        <FooterNav
+          className="mt-4"
+          prevHref="/temario"
+          prevLabel="Temario del curso"
+          nextHref="/codigo"
+          nextLabel="Prácticas y código"
+        />
       </div>
     </main>
   )

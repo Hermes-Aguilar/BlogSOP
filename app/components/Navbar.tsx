@@ -16,7 +16,10 @@ export default function Navbar() {
   const pathname = usePathname()
 
   return (
-    <nav className="bg-black/70 backdrop-blur-md border-b border-white/10 px-10 flex items-center gap-10 sticky top-0 z-10">
+    <nav
+      style={{ viewTransitionName: 'site-nav' }}
+      className="bg-black/70 backdrop-blur-md border-b border-white/10 px-10 flex items-center gap-10 sticky top-0 z-10"
+    >
 
       {/* LOGO */}
       <Link href="/" className="font-mono text-[16px] font-medium flex items-center gap-1.5 py-6 select-none">

@@ -1,4 +1,8 @@
 import Link from 'next/link'
+import HeroBackground from './components/HeroBackground'
+import RevealHeading from './components/RevealHeading'
+import SpotlightCard from './components/SpotlightCard'
+import FooterNav from './components/FooterNav'
 
 const sections = [
   {
@@ -43,25 +47,23 @@ export default function Home() {
     <main className="min-h-screen">
 
       {/* HERO */}
-      <section
-        className="relative h-112 flex items-end px-8 pb-14"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1400&q=80')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/60 to-black/80" />
+      <section className="relative h-112 flex items-end px-8 pb-14 overflow-hidden">
+        <HeroBackground image="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1400&q=80" />
 
         <div className="relative z-10 max-w-3xl">
-          <p className="font-mono text-[11px] text-green-400 tracking-[0.25em] uppercase mb-5 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+          <p className="font-mono text-[11px] text-green-400 tracking-[0.25em] uppercase mb-5 flex items-center gap-2 animate-fade-up">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block animate-pulse" />
             Portafolio · 6to semestre
           </p>
-          <h1 className="text-4xl sm:text-5xl font-light text-white leading-tight tracking-tight mb-4">
-            Sistemas Operativos
-          </h1>
-          <p className="text-sm text-gray-300 leading-relaxed max-w-xl">
+          <RevealHeading
+            text="Sistemas Operativos"
+            as="h1"
+            className="text-5xl sm:text-7xl font-light text-white leading-[1.05] tracking-[-0.04em] mb-5 bg-gradient-to-br from-white via-white to-green-200 bg-clip-text text-transparent"
+          />
+          <p
+            className="text-sm text-gray-300 leading-relaxed max-w-xl animate-fade-up"
+            style={{ animationDelay: '600ms' }}
+          >
             Temario del curso, prácticas con su código y salida, y conclusión final del semestre.
           </p>
         </div>
@@ -118,25 +120,25 @@ export default function Home() {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
           {sections.map((s, i) => (
-            <Link
+            <SpotlightCard
               key={s.id}
               href={s.slug}
               style={{ animationDelay: `${i * 70}ms` }}
-              className="animate-fade-up group bg-[#0a0a0a] hover:bg-[#141414] p-6 transition-colors flex flex-col gap-3"
+              className="animate-fade-up group bg-[#0a0a0a] hover:bg-[#101010] p-6 transition-colors flex flex-col gap-3"
             >
               <div className="flex items-center justify-between">
                 <p className="font-mono text-[10px] text-green-400 tracking-widest uppercase">
                   {s.id} · {s.label}
                 </p>
-                <span className="font-mono text-[11px] text-gray-600 group-hover:text-green-400 transition-colors">
+                <span className="font-mono text-[11px] text-gray-600 group-hover:text-green-400 group-hover:translate-x-1 transition-all duration-300">
                   →
                 </span>
               </div>
               <h3 className="text-sm font-medium text-gray-100 leading-snug">
                 {s.title}
               </h3>
-              <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
-            </Link>
+              <p className="text-xs text-gray-400 leading-relaxed">{s.desc}</p>
+            </SpotlightCard>
           ))}
 
           {/* Sexta celda: imagen decorativa para no dejar el hueco vacío */}
@@ -167,30 +169,13 @@ export default function Home() {
 
       {/* NAV inferior */}
       <section className="max-w-5xl mx-auto px-8 pb-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
-          <Link
-            href="/contacto"
-            className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors"
-          >
-            <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-              ← anterior
-            </p>
-            <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-              Contacto y créditos
-            </p>
-          </Link>
-          <Link
-            href="/temario"
-            className="group bg-[#0a0a0a] hover:bg-[#141414] p-5 transition-colors text-right"
-          >
-            <p className="font-mono text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-              siguiente →
-            </p>
-            <p className="text-sm text-gray-200 group-hover:text-green-400 transition-colors">
-              Temario del curso
-            </p>
-          </Link>
-        </div>
+        <FooterNav
+          className="mt-0 pt-0 border-t-0"
+          prevHref="/contacto"
+          prevLabel="Contacto y créditos"
+          nextHref="/temario"
+          nextLabel="Temario del curso"
+        />
       </section>
 
     </main>
