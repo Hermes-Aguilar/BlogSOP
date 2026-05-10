@@ -358,34 +358,32 @@ export default function Laboratorio() {
               </p>
             </header>
 
-            {cat.categoria === 'Sistema de archivos' && (
-              <div className="mb-4 border border-white/10 rounded-lg bg-[#0d0d0d] overflow-hidden">
-                <div className="grid grid-cols-2 divide-x divide-white/10">
-                  <div className="px-5 py-4">
-                    <p className="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-2">
-                      // comando (shell)
-                    </p>
-                    <span className="font-mono text-sm font-medium text-purple-400">
-                      pwd
-                    </span>
-                    <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
-                      Lo que se escribe en la terminal.
-                    </p>
-                  </div>
-                  <div className="px-5 py-4">
-                    <p className="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-2">
-                      // función (C / syscall)
-                    </p>
-                    <span className="font-mono text-sm text-green-400">
-                      getcwd()
-                    </span>
-                    <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
-                      Lo que se usa para programarlo en C.
-                    </p>
-                  </div>
+            <div className="mb-4 border border-white/10 rounded-lg bg-[#0d0d0d] overflow-hidden">
+              <div className="grid grid-cols-2 divide-x divide-white/10">
+                <div className="px-5 py-4">
+                  <p className="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-2">
+                    // comando (shell)
+                  </p>
+                  <span className="font-mono text-sm font-medium text-purple-400">
+                    {cat.comandos[0].nombre}
+                  </span>
+                  <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                    Lo que se escribe en la terminal.
+                  </p>
+                </div>
+                <div className="px-5 py-4">
+                  <p className="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-2">
+                    // función (C / syscall)
+                  </p>
+                  <span className="font-mono text-sm text-green-400 break-all">
+                    {cat.comandos[0].syscall}
+                  </span>
+                  <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                    Lo que se usa para programarlo en C.
+                  </p>
                 </div>
               </div>
-            )}
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden">
               {cat.comandos.map((cmd, i) => (
