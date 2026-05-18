@@ -253,7 +253,7 @@ export default function Contacto() {
                   <div className="flex flex-col gap-px bg-white/10 border border-white/10 rounded overflow-hidden">
                     {[
                       { v: 'M.C.', l: 'Cs. de la Computación · BUAP' },
-                      { v: '4', l: 'universidades del ex SUEO' },
+                      { v: '4', l: 'universidades del ex SUNEO' },
                       { v: 'GULMIX', l: 'fundador del grupo de Linux' },
                       { v: '30+', l: 'años de docencia universitaria' },
                     ].map((s) => (
