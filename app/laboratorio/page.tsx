@@ -310,10 +310,10 @@ export default function Laboratorio() {
     <main className="bg-[#0a0a0a] text-gray-200">
       {/* HERO */}
       <PageHero
-        kicker="// laboratorio · syscalls"
+        kicker="// laboratorio · systemcalls"
         title="Laboratorio de comandos"
-        accent="— syscalls de Linux"
-        subtitle="Syscalls y comandos implementados en Linux a lo largo del curso de Sistemas Operativos."
+        accent="— systemcalls de Linux"
+        subtitle="Systemcalls y comandos implementados en Linux a lo largo del curso de Sistemas Operativos."
         image="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=80"
       />
 
@@ -330,7 +330,7 @@ export default function Laboratorio() {
             Los comandos listados a continuación corresponden a los códigos
             escritos durante las prácticas del curso. Cada uno se implementó en
             C reproduciendo el comportamiento del comando real de Linux, pero
-            invocando directamente la syscall del kernel que está por detrás.
+            invocando directamente la systemcall del kernel que está por detrás.
           </p>
           <p className="text-sm text-gray-400 leading-relaxed">
             Por ejemplo, el comando <code className="font-mono text-green-400 text-[0.9em]">pwd</code> se programa con{' '}
@@ -344,7 +344,7 @@ export default function Laboratorio() {
             <code className="font-mono text-green-400 text-[0.9em]">cat</code> con{' '}
             <code className="font-mono text-green-400 text-[0.9em]">open() / read()</code>, y así
             sucesivamente con cada uno de los comandos. La columna{' '}
-            <span className="text-gray-300">syscall</span> de cada tarjeta indica
+            <span className="text-gray-300">systemcall</span> de cada tarjeta indica
             exactamente qué llamada al kernel se usó en la práctica.
           </p>
         </section>
@@ -373,7 +373,7 @@ export default function Laboratorio() {
                 </div>
                 <div className="px-5 py-4">
                   <p className="font-mono text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-2">
-                    // función (C / syscall)
+                    // función (C / systemcall)
                   </p>
                   <span className="font-mono text-sm text-green-400 break-all">
                     {cat.comandos[0].syscall}

@@ -3,7 +3,7 @@ import SpotlightCard from '../components/SpotlightCard'
 
 const stats = [
   { valor: '20+', label: 'comandos implementados' },
-  { valor: '6', label: 'syscalls principales' },
+  { valor: '6', label: 'systemcalls principales' },
   { valor: '8', label: 'prácticas documentadas' },
   { valor: '~3k', label: 'líneas de C escritas' },
 ]
@@ -60,7 +60,7 @@ export default function Reflexion() {
           <span className="float-left font-mono text-6xl leading-none text-green-400 mr-3 mt-1">
             A
           </span>
-bordar Sistemas Operativos desde la práctica transforma la materia: deja de ser un conjunto de definiciones abstractas y se convierte en código verificable, compilable y ejecutable. El uso directo de syscalls como{' '}
+bordar Sistemas Operativos desde la práctica transforma la materia: deja de ser un conjunto de definiciones abstractas y se convierte en código verificable, compilable y ejecutable. El uso directo de systemcalls como{' '}
           <code className="font-mono text-green-400 bg-white/5 px-1.5 py-0.5 rounded text-[0.95em]">fork()</code>,{' '}
           <code className="font-mono text-green-400 bg-white/5 px-1.5 py-0.5 rounded text-[0.95em]">pipe()</code>,{' '}
           <code className="font-mono text-green-400 bg-white/5 px-1.5 py-0.5 rounded text-[0.95em]">semget()</code> y{' '}
@@ -109,13 +109,13 @@ bordar Sistemas Operativos desde la práctica transforma la materia: deja de ser
             // 02 · mini shell
           </p>
           <h2 className="text-2xl font-light text-gray-100 tracking-tight mb-5">
-            El shell: cada comando es una syscall disfrazada
+            El shell: cada comando es una systemcall disfrazada
           </h2>
           <p className="text-[15px] text-gray-300 leading-[1.85] mb-5">
-            La siguiente etapa llevó todo al siguiente nivel: construir un mini shell funcional desde cero en C. Implementar comandos como <code className="font-mono text-green-400 text-[0.9em]">ls</code>, <code className="font-mono text-green-400 text-[0.9em]">stat</code>, <code className="font-mono text-green-400 text-[0.9em]">find</code> o <code className="font-mono text-green-400 text-[0.9em]">who</code> usando syscalls directas fue la forma más concreta de entender cómo funciona Linux por dentro.
+            La siguiente etapa llevó todo al siguiente nivel: construir un mini shell funcional desde cero en C. Implementar comandos como <code className="font-mono text-green-400 text-[0.9em]">ls</code>, <code className="font-mono text-green-400 text-[0.9em]">stat</code>, <code className="font-mono text-green-400 text-[0.9em]">find</code> o <code className="font-mono text-green-400 text-[0.9em]">who</code> usando systemcalls directas fue la forma más concreta de entender cómo funciona Linux por dentro.
           </p>
           <p className="text-[15px] text-gray-400 leading-[1.85]">
-            Cada comando del shell es, en realidad, una llamada al kernel disfrazada de texto. Cuando tecleas <code className="font-mono text-gray-300 text-[0.9em]">ls -la</code>, no estás invocando magia: estás llamando a <code className="font-mono text-green-400 text-[0.9em]">opendir()</code>, recorriendo el directorio con <code className="font-mono text-green-400 text-[0.9em]">readdir()</code>, y consultando metadatos con <code className="font-mono text-green-400 text-[0.9em]">stat()</code>. Punto.
+            Cada comando del shell es, en realidad, una llamada al kernel disfrazada de texto. Cuando tecleas <code className="font-mono text-gray-300 text-[0.9em]">ls -la</code>, no estás invocando magia: estás llamando a <code className="font-mono text-green-400 text-[0.9em]">opendir()</code>, recorriendo el directorio con <code className="font-mono text-green-400 text-[0.9em]">readdir()</code>, y consultando metadatos con <code className="font-mono text-green-400 text-[0.9em]">stat()</code>.
           </p>
         </section>
 
@@ -128,7 +128,7 @@ bordar Sistemas Operativos desde la práctica transforma la materia: deja de ser
             ¿Y de aquí, qué sigue?
           </h2>
           <p className="text-[15px] text-gray-300 leading-[1.85] mb-5">
-            Este portafolio representa no solo el trabajo del semestre sino la evidencia de que los sistemas operativos no son una caja negra. Linux expone todo a través de syscalls, <code className="font-mono text-green-400 text-[0.9em]">/proc</code> y el sistema de archivos, y con C se puede tocar casi cualquier parte del kernel.
+            Este portafolio representa no solo el trabajo del semestre sino la evidencia de que los sistemas operativos no son una caja negra. Linux expone todo a través de systemcalls, <code className="font-mono text-green-400 text-[0.9em]">/proc</code> y el sistema de archivos, y con C se puede tocar casi cualquier parte del kernel.
           </p>
           <p className="text-[15px] text-gray-400 leading-[1.85]">
             La siguiente frontera natural sería explorar hilos con <code className="font-mono text-green-400 text-[0.9em]">pthreads</code>, manejo profundo de señales, y la administración de memoria virtual con <code className="font-mono text-green-400 text-[0.9em]">mmap()</code>. Por ahora, la sensación que queda es la de haber abierto una caja que ya no se puede cerrar.
@@ -138,7 +138,7 @@ bordar Sistemas Operativos desde la práctica transforma la materia: deja de ser
         {/* TAGS */}
         <footer className="mt-20 pt-8 border-t border-white/10">
           <p className="font-mono text-[11px] text-gray-500 tracking-wider uppercase mb-4">
-            // syscalls usadas
+            // systemcalls usadas
           </p>
           <div className="flex flex-wrap gap-2 mb-10">
             {tags.map((t) => (

@@ -160,7 +160,7 @@ export default function Home() {
                 // linux · kernel
               </p>
               <p className="text-xs text-gray-300 leading-relaxed">
-                Todo lo que ves en este blog corre sobre syscalls.
+                Todo lo que ves en este blog corre sobre systemcalls.
               </p>
             </div>
           </div>

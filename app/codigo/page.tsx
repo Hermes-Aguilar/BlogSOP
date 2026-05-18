@@ -9,7 +9,7 @@ const practicas = [
 {
     id: 0,
     titulo: 'Mecanismos IPC del Kernel de Linux',
-    descripcion: 'Investigación sobre los parámetros IPC en /proc/sys/kernel/: semáforos, memoria compartida y colas de mensajes. Incluye su relación con las syscalls.',
+    descripcion: 'Investigación sobre los parámetros IPC en /proc/sys/kernel/: semáforos, memoria compartida y colas de mensajes. Incluye su relación con las systemcalls.',
     lenguaje: 'text',
     salida: `$ cat /proc/sys/kernel/sem
 32000   1024000000      500     32000
@@ -262,7 +262,7 @@ cat msgmax    cat msgmnb    cat msgmni`}
             6. Relación con las llamadas al sistema (System Calls)
           </h2>
           <p className="mb-3">
-            Toda operación que realiza un proceso de usuario sobre los mecanismos IPC —o sobre cualquier recurso del sistema— involucra internamente una llamada al sistema. Las syscalls son la interfaz entre el espacio de usuario y el kernel: cuando un proceso necesita un servicio privilegiado, ejecuta una instrucción especial que transfiere el control al kernel.
+            Toda operación que realiza un proceso de usuario sobre los mecanismos IPC —o sobre cualquier recurso del sistema— involucra internamente una llamada al sistema. Las systemcalls son la interfaz entre el espacio de usuario y el kernel: cuando un proceso necesita un servicio privilegiado, ejecuta una instrucción especial que transfiere el control al kernel.
           </p>
           <p className="mb-3">
             Una observación importante señalada en clase es que las funciones de la biblioteca estándar de C que utilizamos cotidianamente son envoltorios de llamadas al sistema:
@@ -290,7 +290,7 @@ cat msgmax    cat msgmnb    cat msgmni`}
                 <tr className="border-b border-white/5">
                   <td className="px-3 py-2 font-mono text-green-400">fopen() / fwrite()</td>
                   <td className="px-3 py-2 font-mono text-gray-200">open() / write()</td>
-                  <td className="px-3 py-2">Operaciones de archivo traducidas a syscalls.</td>
+                  <td className="px-3 py-2">Operaciones de archivo traducidas a systemcalls.</td>
                 </tr>
                 <tr className="bg-white/2">
                   <td className="px-3 py-2 font-mono text-green-400">fread()</td>
@@ -379,7 +379,7 @@ kernel.msgmax = 65536`}
   {
     id: 1,
     titulo: 'Mini Shell — Shell personalizado en C',
-    descripcion: 'Shell interactivo implementado desde cero con tabla de despacho. Implementa 20+ comandos usando syscalls directas de Linux.',
+    descripcion: 'Shell interactivo implementado desde cero con tabla de despacho. Implementa 20+ comandos usando systemcalls directas de Linux.',
     lenguaje: 'c',
     salida: `$ ./minishell
 mini-shell:/home/hermes$ pwd

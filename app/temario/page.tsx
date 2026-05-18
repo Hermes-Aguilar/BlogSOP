@@ -34,9 +34,9 @@ const capitulos: Capitulo[] = [
         id: '1.1',
         titulo: 'Introducción al sistema operativo Linux',
         descripcion:
-          'Linux es un sistema operativo tipo Unix de código abierto cuyo núcleo (kernel) gestiona el hardware, los procesos, la memoria y el sistema de archivos. Durante el curso se utilizó Parrot OS (basado en Debian) como entorno de trabajo, accediendo a las syscalls del kernel directamente desde C.',
+          'Linux es un sistema operativo tipo Unix de código abierto cuyo núcleo (kernel) gestiona el hardware, los procesos, la memoria y el sistema de archivos. Durante el curso se utilizó Parrot OS (basado en Debian) como entorno de trabajo, accediendo a las systemcalls del kernel directamente desde C.',
         contexto:
-          'Linus Torvalds inició el kernel en 1991 inspirado en MINIX. Hoy es la base de Android, servidores web, supercomputadoras y distribuciones como Debian, Ubuntu o Parrot. Lo que lo hace especial es que TODO está expuesto: archivos en /proc para leer el estado del sistema, /dev para hablar con el hardware y syscalls públicas para que cualquier programa pueda pedir servicios al kernel.',
+          'Linus Torvalds inició el kernel en 1991 inspirado en MINIX. Hoy es la base de Android, servidores web, supercomputadoras y distribuciones como Debian, Ubuntu o Parrot. Lo que lo hace especial es que TODO está expuesto: archivos en /proc para leer el estado del sistema, /dev para hablar con el hardware y systemcalls públicas para que cualquier programa pueda pedir servicios al kernel.',
         codigoEjemplo: `/*
  * Ejemplo 1.1 — Invocar comandos del sistema desde C.
  * system("uname -a") imprime la información completa del kernel.
@@ -50,7 +50,7 @@ int main() {
 }`,
         practicaId: null,
         aprendidoHermes:
-          'Aprendí que el SO no es solo una interfaz: es la capa que traduce las llamadas del programa en operaciones reales sobre el hardware. Linux expone esa capa con archivos en /proc, /dev y syscalls públicas, lo que permite estudiar al kernel desde adentro.',
+          'Aprendí que el SO no es solo una interfaz: es la capa que traduce las llamadas del programa en operaciones reales sobre el hardware. Linux expone esa capa con archivos en /proc, /dev y systemcalls públicas, lo que permite estudiar al kernel desde adentro.',
         aprendidoGuadalupe:
           'Lo más interesante para mí fue entender que Linux no es un solo programa, sino un sistema modular: el kernel maneja el hardware, el shell traduce nuestros comandos y los procesos viven encima. Esa separación de responsabilidades es lo que lo hace tan estable.',
       },
@@ -477,7 +477,7 @@ int main() {
         practicaId: 0,
         practicaTitulo: 'Investigación — Mecanismos IPC del Kernel de Linux',
         aprendidoHermes:
-          'Entendí que System V IPC es el modelo "clásico" pero verboso: cada operación necesita varias syscalls. POSIX IPC es la alternativa moderna y más limpia, pero el curso se enfocó en System V porque expone mejor lo que hace el kernel.',
+          'Entendí que System V IPC es el modelo "clásico" pero verboso: cada operación necesita varias systemcalls. POSIX IPC es la alternativa moderna y más limpia, pero el curso se enfocó en System V porque expone mejor lo que hace el kernel.',
         aprendidoGuadalupe:
           'Aunque la sintaxis es fea (semget, shmget, msgget...) me sirvió para apreciar las APIs modernas. Cuando ahora veo un mutex en Python o un canal en Go, sé que por debajo hay todo este "trabajo sucio" que System V nos hizo escribir a mano.',
       },
@@ -623,15 +623,15 @@ int main() {
   {
     num: '04',
     titulo: 'Proyecto integrador — Mini Shell',
-    resumen: 'Shell personalizado en C que integra syscalls de archivos, procesos y red.',
+    resumen: 'Shell personalizado en C que integra systemcalls de archivos, procesos y red.',
     temas: [
       {
         id: '4.1',
         titulo: 'Mini Shell — Shell personalizado en C',
         descripcion:
-          'Como cierre del semestre se construyó un shell desde cero con tabla de despacho. Implementa más de 20 comandos (pwd, cd, ls, stat, statvfs, find, cat, ip, mac, who, mesg, wall, dev, free, date, uname, etc) usando syscalls directas de Linux. Cada comando del shell es una llamada al kernel disfrazada de texto.',
+          'Como cierre del semestre se construyó un shell desde cero con tabla de despacho. Implementa más de 20 comandos (pwd, cd, ls, stat, statvfs, find, cat, ip, mac, who, mesg, wall, dev, free, date, uname, etc) usando systemcalls directas de Linux. Cada comando del shell es una llamada al kernel disfrazada de texto.',
         contexto:
-          'El shell es el orquestador clásico de un sistema Unix: lee una línea, la parsea, decide si el comando es un builtin (cd, exit, etc) o un programa externo, y en este último caso hace fork+exec. Construir uno desde cero obliga a tocar casi todas las syscalls del sistema y entender cómo se conectan entre sí.',
+          'El shell es el orquestador clásico de un sistema Unix: lee una línea, la parsea, decide si el comando es un builtin (cd, exit, etc) o un programa externo, y en este último caso hace fork+exec. Construir uno desde cero obliga a tocar casi todas las systemcalls del sistema y entender cómo se conectan entre sí.',
         codigoEjemplo: `/*
  * Ejemplo 4.1 — Esqueleto mínimo del Mini Shell:
  * lee una línea, la imprime y vuelve a empezar.
@@ -655,7 +655,7 @@ int main() {
         practicaId: 1,
         practicaTitulo: 'Mini Shell — Shell personalizado en C',
         aprendidoHermes:
-          'Construir un shell me hizo entender que casi nada del "user-land" de Linux es magia: ls es opendir+readdir+stat, ip es socket+ioctl, who es leer /run/systemd/sessions. Una vez que ves la syscall debajo, dejas de ver al SO como caja negra.',
+          'Construir un shell me hizo entender que casi nada del "user-land" de Linux es magia: ls es opendir+readdir+stat, ip es socket+ioctl, who es leer /run/systemd/sessions. Una vez que ves la systemcall debajo, dejas de ver al SO como caja negra.',
         aprendidoGuadalupe:
           'Implementar comandos como cd o pwd me hizo apreciar lo que damos por sentado: cada vez que escribes "cd .." el shell tiene que hablar con el kernel, validar permisos, actualizar variables. Y eso pasa en milisegundos cada vez.',
       },
